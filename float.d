@@ -222,7 +222,6 @@ func int _FLT_Build_Func(var int codePtr, var int param1Ptr, var int param2Ptr, 
     CALL_PutRetValTo(resultPtr);
     CALL__cdecl(codePtr);
     return CALL_Close();
-
 };
 
 //************************************
