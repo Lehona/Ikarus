@@ -338,8 +338,8 @@ func int MEMINT_SwitchG1G2(var int g1Val, var int g2Val) {
 func int MEM_ReadInt (var int address) {
     /* note: there will not be error handling once Ikarus is
      * fully set up by MEM_InitAll. This function will be replaced. */
-    if (address <= 0) {
-        MEM_Error (ConcatStrings ("MEM_ReadInt: Invalid address: ", IntToString (address)));
+    if (address == 0) {
+        MEM_Error ("MEM_ReadInt: address is NULL");
         return 0;
     };
     
@@ -348,8 +348,8 @@ func int MEM_ReadInt (var int address) {
 };
 
 func string MEM_ReadString (var int address) {
-    if (address <= 0) {
-        MEM_Error (ConcatStrings ("MEM_ReadString: Invalid address: ", IntToString (address)));
+    if (address == 0) {
+        MEM_Error ("MEM_ReadString: address is NULL");
         return "";
     };
 
@@ -440,8 +440,8 @@ func void MEM_WriteInt (var int address, var int val) {
     /* note: there will not be error handling once Ikarus is
      * fully set up by MEM_InitAll. This function will be replaced. */
 
-    if (address <= 0) {
-        MEM_Error (ConcatStrings ("MEM_WriteInt: Invalid address: ", IntToString (address)));
+    if (address == 0) {
+        MEM_Error ("MEM_WriteInt: address is NULL");
         return;
     };
 
@@ -452,8 +452,8 @@ func void MEM_WriteInt (var int address, var int val) {
 };
 
 func void MEM_WriteString (var int address, var string val) {
-    if (address <= 0) {
-        MEM_Error (ConcatStrings ("MEM_WriteString: Invalid address: ", IntToString (address)));
+    if (address == 0) {
+        MEM_Error ("MEM_WriteString: address is NULL");
         return;
     };
 
@@ -562,14 +562,9 @@ func void MEM_AssignInst (var int inst, var int ptr) {
         return;
     };
 
-    if (ptr <= 0) {
-        if (ptr < 0) {
-            MEM_Error (ConcatStrings ("MEM_AssignInst: Invalid pointer: ", IntToString (ptr)));
-            return;
-        } else if (!MEM_AssignInstSuppressNullWarning) {
-            /* Instanzen die Null sind, will man eigentlich nicht, die machen nur Ärger. */
-            MEM_Warn ("MEM_AssignInst: ptr is NULL. Use MEM_AssignInstNull if that's what you want.");
-        };
+    if (ptr == 0 && !MEM_AssignInstSuppressNullWarning) {
+		/* Instanzen die Null sind, will man eigentlich nicht, die machen nur Ärger. */
+		MEM_Warn ("MEM_AssignInst: ptr is NULL. Use MEM_AssignInstNull if that's what you want.");
     };
 
     var int sym;
@@ -593,16 +588,10 @@ func MEMINT_HelperClass MEM_PtrToInst (var int ptr) {
         hlpOffsetPtr = MEM_ReadIntArray (currSymbolTableAddress, hlp) + zCParSymbol_offset_offset;
     };
     
-    if (ptr <= 0) {
-        if (ptr < 0) {
-            MEM_Error (ConcatStrings ("MEM_PtrToInst: Invalid pointer: ", IntToString (ptr)));
-            return;
-        } else if (!MEM_AssignInstSuppressNullWarning) {
-            /* Instanzen die Null sind, will man eigentlich nicht, die machen nur Ärger. */
-            MEM_Warn ("MEM_PtrToInst: ptr is NULL. Use MEM_NullToInst if that's what you want.");
-        };
-        
-        MEM_WriteInt(hlpOffsetPtr, 0);
+    if (ptr == 0 && !MEM_AssignInstSuppressNullWarning ) {
+		/* Instanzen die Null sind, will man eigentlich nicht, die machen nur Ärger. */
+		MEM_Warn ("MEM_PtrToInst: ptr is NULL. Use MEM_NullToInst if that's what you want.");
+		MEM_WriteInt(hlpOffsetPtr, 0);
     } else {
         MEM_WriteInt(hlpOffsetPtr, ptr);
     };
@@ -1800,9 +1789,9 @@ func int MEM_CompareBytes(var int ptr1, var int ptr2, var int byteCount) {
         return 1;
     };
     
-    if (ptr1 <= 0)
-    || (ptr2 <= 0) {
-        MEM_Error ("MEM_CompareBytes: ptr1 or ptr2 is invalid (<= 0)");
+    if (ptr1 == 0)
+    || (ptr2 == 0) {
+        MEM_Error ("MEM_CompareBytes: ptr1 or ptr2 is Null");
         return 0;
     };
 
