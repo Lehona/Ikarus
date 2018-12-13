@@ -16,3 +16,6 @@ um mit Floatingpointwerten (bzw. zREAL) zu rechnen. Dies stellt eine
 Empfehlenswerte aber nicht notwendige Ergänzung zu Ikarus dar.
 Die Benutzung ist in der Datei selbst erklärt.
 Die Datei muss nach Ikarus.d geparst werden.
+
+Um Ikarus zu nutzen, braucht lediglich Ikarus_G1.src, bzw. Ikarus_G2.src
+in die Gothic.src eingetragen zu werden.
