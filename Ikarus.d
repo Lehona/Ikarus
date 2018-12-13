@@ -4646,6 +4646,7 @@ func void MEMINT_SendToSpy_Implementation(var int errorType, var string text) {
             /* There is a warning "lost focus",
              * that will be printed constantly, unless
              * I reduce its priority here */
+            MemoryProtectionOverride(/*0x4F55C2*/ 5199298, 1);
             MEM_WriteByte(5199298, 1);
         };
     
