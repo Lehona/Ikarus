@@ -17,7 +17,7 @@
 //  to access ini files.
 //************************************
 
-const int NUM_ENTRIES = 26;
+const int NUM_ENTRIES = 25;
 
 class zCOption {
     var int _vbtl;
