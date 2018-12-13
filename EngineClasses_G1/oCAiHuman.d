@@ -119,7 +119,7 @@ class zCAIPlayer {
         zCCollObjectCharacter::zEConfigState m_eCollObjectStateOld  : 4;
     };*/
     
-    var int bitfield[6]; //Zur Bedeutung siehe obenstehende Struktur.
+    var int bitfield[3]; //Zur Bedeutung siehe obenstehende Struktur.
     
     
     //Bluteffekte
@@ -197,7 +197,7 @@ class oCAniCtrl_Human {
         var int _zCAIPlayer_slidePolyNormal[3];        
         var int _zCAIPlayer_checkWaterCollBodyLen;  
         var int _zCAIPlayer_modelHeadNode;          
-        var int _zCAIPlayer_bitfield[6]; 
+        var int _zCAIPlayer_bitfield[3];
         var int _zCAIPlayer_bloodVobList_array; 
         var int _zCAIPlayer_bloodVobList_numAlloc;
         var int _zCAIPlayer_bloodVobList_numInArray; 
