@@ -80,21 +80,7 @@ class zCCamera {
     // Screen-Effects
     var int screenFadeEnabled;         //zBOOL            
     var int screenFadeColor;           //zCOLOR          
-    var string screenFadeTexture;      //zSTRING            
-    var int screenFadeTextureAniFPS;   //zREAL            
-    
-    /*
-    enum zTRnd_AlphaBlendFunc   {   zRND_ALPHA_FUNC_MAT_DEFAULT,
-                                zRND_ALPHA_FUNC_NONE,                   
-                                zRND_ALPHA_FUNC_BLEND,              
-                                zRND_ALPHA_FUNC_ADD,                    
-                                zRND_ALPHA_FUNC_SUB,                    
-                                zRND_ALPHA_FUNC_MUL,                    
-                                zRND_ALPHA_FUNC_MUL2,                   
-                                zRND_ALPHA_FUNC_TEST,   
-                                zRND_ALPHA_FUNC_BLEND_TEST
-                            };  */
-    var int screenFadeTextureBlendFunc;     //zTRnd_AlphaBlendFunc
+
     var int cinemaScopeEnabled;             //zBOOL 
     var int cinemaScopeColor;               //zCOLOR
 
