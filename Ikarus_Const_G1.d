@@ -49,7 +49,7 @@ const int MEMINT_MenuItemArrayAddres = 8836196; //0x86D464
 
 //Ein paar nützliche statische Objekte
 const int MEMINT_oGame_Pointer_Address = 9283260; //0x8DA6BC
-const int MEMINT_zTimer_Address = 9236972;//0x8CF1EC
+const int MEMINT_zTimer_Address = 9236968;//0x8CF1E8
 const int MEMINT_oCInformationManager_Address = 10328072;//0x9D9808
 
 const int MEMINT_gameMan_Pointer_address = 8776164; //0x85E9E4
