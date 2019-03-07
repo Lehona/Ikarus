@@ -2891,7 +2891,7 @@ func void MEM_CallByString (var string fnc) {
     /* Mikrooptimierung: Wird zweimal hintereinander die selbe Funktion
      * mit CallByString aufgerufen, nicht nochmal neu suchen. */
     var int symbID;
-    var string cacheFunc; var int cacheSymbID;
+    const string cacheFunc = ""; const int cacheSymbID = 0;
 
     if (Hlp_StrCmp (cacheFunc, fnc)) {
         symbID = cacheSymbID;
