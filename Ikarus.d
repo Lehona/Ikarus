@@ -2966,6 +2966,11 @@ func int MEM_GetFuncIDByOffset(var int offset) {
         MEM_Error("MEM_GetFuncIDByOffset: Offset is not in valid bounds (0 <= offset < ParserStackSize).");
         return -1;
     };
+
+    /* Handle overwritten functions correctly that immediately jump "nto another function, e.g. MEM_ReadInt */
+    if (MEM_ReadByte(offset + currParserStackAddress) == zPAR_TOK_JUMP) {
+        offset = MEM_ReadInt(offset + currParserStackAddress + 1);
+    };
     
     var zCArray array; array = _^(funcStartsArray);
     
