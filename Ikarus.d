@@ -3749,7 +3749,11 @@ func void MEM_InitGlobalInst() {
     MEM_Waynet = _^(MEM_World.wayNet);
 
     //Camera
-    MEM_Camera = _^(MEM_Game._zCSession_camera);
+    if (MEM_Game._zCSession_camera) {
+        MEM_Camera = _^(MEM_Game._zCSession_camera);
+    } else {
+        MEM_AssignInstNull (MEM_Camera);
+    };
 
     //SkyController:
     if (MEM_World.skyControlerOutdoor) {
