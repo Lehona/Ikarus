@@ -3799,6 +3799,7 @@ func int Hlp_Is_oCMob(var int ptr) {
     return (vtbl == oCMob_vtbl)
         |  (vtbl == oCMobInter_vtbl)
         |  (vtbl == oCMobContainer_vtbl)
+        |  (vtbl == oCMobFire_vtbl)
         |  (vtbl == oCMobDoor_vtbl);
 };
 
@@ -3810,6 +3811,7 @@ func int Hlp_Is_oCMobInter(var int ptr) {
 
     return (vtbl == oCMobInter_vtbl)
          | (vtbl == oCMobContainer_vtbl)
+         | (vtbl == oCMobFire_vtbl)
          | (vtbl == oCMobDoor_vtbl);
 };
 
