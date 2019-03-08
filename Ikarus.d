@@ -2969,7 +2969,11 @@ func int MEM_GetFuncIDByOffset(var int offset) {
 
     /* Handle overwritten functions correctly that immediately jump into another function, e.g. MEM_ReadInt */
     if (MEM_ReadByte(offset + currParserStackAddress) == zPAR_TOK_JUMP) {
-        offset = MEM_ReadInt(offset + currParserStackAddress + 1);
+        var int target; target = MEM_ReadInt(offset + currParserStackAddress + 1);
+        // Only for targets within the code stack!
+        if (target >= 0) && (target < MEM_Parser.stack_stacksize) {
+            return MEM_GetFuncIDByOffset(target);
+        };
     };
     
     var zCArray array; array = _^(funcStartsArray);
