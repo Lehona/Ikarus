@@ -1076,7 +1076,9 @@ const int ASMINT_OP_retn         = 195;  //0xC3
 const int ASMINT_OP_nop          = 144;  //0x90
 const int ASMINT_OP_jmp          = 233;  //0xE9
 const int ASMINT_OP_PushEAX      =  80;  //0x50
+const int ASMINT_OP_pushECX      =  81;  //0x51
 const int ASMINT_OP_popEAX       =  88;  //0x58
+const int ASMINT_OP_popECX       =  89;  //0x59
 const int ASMINT_OP_pusha       = 96;    //0x60 //aus LeGo geklaut
 const int ASMINT_OP_popa        = 97;    //0x61 //aus LeGo geklaut
 const int ASMINT_OP_movMemToEAX = 161;   //0xA1 //aus LeGo geklaut
@@ -1085,9 +1087,11 @@ const int ASMINT_OP_movALToMem   = 162;  //0xA2
 /* 2 Bytes */
 const int ASMINT_OP_movEAXToMem     =  1417; //0x0589
 const int ASMINT_OP_movEAXToAL      =   138; //0x008A
+const int ASMINT_OP_movCLToEAX      =  2184; //0x0888
 const int ASMINT_OP_floatStoreToMem =  7641; //0x1DD9
 const int ASMINT_OP_addImToESP      = 50307; //0xC483
 const int ASMINT_OP_movMemToECX     =  3467; //0x0D8B
+const int ASMINT_OP_movMemToCL      =  3466; //0x0D8A
 const int ASMINT_OP_movMemToEDX     =  5515; //0x158B
 const int ASMINT_OP_movECXtoEAX     = 49547; //0xC18B  aus LeGo geklaut
 const int ASMINT_OP_movESPtoEAX     = 50315; //0xC48B  aus LeGo geklaut
@@ -4984,6 +4988,25 @@ func int MEM_ReadByte_(var int addr) {
     return +ret;
 };
 
+func void MEM_WriteByte_(var int addr, var int val) {
+    if (val & ~255) {
+        MEM_Warn("MEM_WriteByte: Val out of range! Truncating to 8 bits.");
+    };
+
+    const int call = 0;
+    if (CALL_Begin(call)) {
+        ASM_Open(18);
+        ASM_1(ASMINT_OP_pushEAX);
+        ASM_1(ASMINT_OP_pushECX);
+        ASM_1(ASMINT_OP_movMemToEAX); ASM_4(_@(addr));
+        ASM_2(ASMINT_OP_movMemToCL);  ASM_4(_@(val));
+        ASM_2(ASMINT_OP_movCLToEAX);
+        ASM_1(ASMINT_OP_popECX);
+        ASM_1(ASMINT_OP_popEAX);
+        call = CALL_End();
+    };
+};
+
 func void MEMINT_InitFasterReadWrite() {
     var MEMINT_HelperClass symb;
 
@@ -5003,8 +5026,9 @@ func void MEMINT_InitFasterReadWrite() {
     
     MEM_ReplaceFunc(MEM_ReadInt,    MEM_ReadInt_);
 
-    /* More secure MEM_ReadByte */
+    /* More secure MEM_ReadByte/MEM_WriteByte */
     MEM_ReplaceFunc(MEM_ReadByte,   MEM_ReadByte_);
+    MEM_ReplaceFunc(MEM_WriteByte,  MEM_WriteByte_);
         
     /* now a faster rewrite of MEM_WriteInt */
     var int id; id  = MEM_GetFuncID(MEM_WriteInt);
