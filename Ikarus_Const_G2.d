@@ -105,6 +105,11 @@ const int oCItem_vtbl           = 8636420;
 const int oCNpc_vtbl            = 8640292;
 const int zCVobLight_vtbl		= 8624756;
 
+const int oCMobWheel_vtbl       = 8637956;
+const int oCMobLadder_vtbl      = 8638252;
+const int oCMobSwitch_vtbl      = 8636988;
+const int oCMobBed_vtbl         = 8636692;
+
 //--------------------------------------
 // Tasten
 //--------------------------------------

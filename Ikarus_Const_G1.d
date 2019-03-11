@@ -105,6 +105,10 @@ const int oCMobDoor_vtbl        = 8247468;
 const int oCItem_vtbl           = 8245452;
 const int oCNpc_vtbl            = 8249140;
 
+const int oCMobBed_vtbl         = 8245708;
+const int oCMobSwitch_vtbl      = 8245988;
+const int oCMobLockable_vtbl    = 8246596;
+
 //orcwarriors constants:
 
 const int zCEventMenager_vtbl            = 8251772;

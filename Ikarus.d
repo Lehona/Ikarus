@@ -3807,8 +3807,13 @@ func int Hlp_Is_oCMob(var int ptr) {
     /* Schreibweise so bescheuert, weil Gothic Sourcer bei || meckert. */
     return (vtbl == oCMob_vtbl)
         |  (vtbl == oCMobInter_vtbl)
+        |  (vtbl == oCMobSwitch_vtbl)
+        |  (vtbl == oCMobWheel_vtbl)
         |  (vtbl == oCMobContainer_vtbl)
+        |  (vtbl == oCMobLockable_vtbl)
+        |  (vtbl == oCMobLadder_vtbl)
         |  (vtbl == oCMobFire_vtbl)
+        |  (vtbl == oCMobBed_vtbl)
         |  (vtbl == oCMobDoor_vtbl);
 };
 
@@ -3819,20 +3824,24 @@ func int Hlp_Is_oCMobInter(var int ptr) {
     vtbl = MEM_ReadInt (ptr);
 
     return (vtbl == oCMobInter_vtbl)
+         | (vtbl == oCMobSwitch_vtbl)
+         | (vtbl == oCMobWheel_vtbl)
          | (vtbl == oCMobContainer_vtbl)
+         | (vtbl == oCMobLockable_vtbl)
+         | (vtbl == oCMobLadder_vtbl)
          | (vtbl == oCMobFire_vtbl)
+         | (vtbl == oCMobBed_vtbl)
          | (vtbl == oCMobDoor_vtbl);
 };
 
 func int Hlp_Is_oCMobLockable(var int ptr) {
     if (!ptr) { return 0; };
 
-    /* Gibt es Lockables die weder Türen noch Truhe sind?
-     * nutzt aber eh keiner => zu faul zum nachforschen. */
     var int vtbl;
     vtbl = MEM_ReadInt (ptr);
 
     return (vtbl == oCMobContainer_vtbl)
+         | (vtbl == oCMobLockable_vtbl)
          | (vtbl == oCMobDoor_vtbl);
 };
 
@@ -3844,6 +3853,26 @@ func int Hlp_Is_oCMobContainer(var int ptr) {
 func int Hlp_Is_oCMobDoor(var int ptr) {
     if (!ptr) { return 0; };
     return (MEM_ReadInt (ptr) == oCMobDoor_vtbl);
+};
+
+func int Hlp_Is_oCMobBed(var int ptr) {
+    if (!ptr) { return 0; };
+    return (MEM_ReadInt (ptr) == oCMobBed_vtbl);
+};
+
+func int Hlp_Is_oCMobSwitch(var int ptr) {
+    if (!ptr) { return 0; };
+    return (MEM_ReadInt (ptr) == oCMobSwitch_vtbl);
+};
+
+func int Hlp_Is_oCMobWheel(var int ptr) {
+    if (!ptr) { return 0; };
+    return (MEM_ReadInt (ptr) == oCMobWheel_vtbl);
+};
+
+func int Hlp_Is_oCMobLadder(var int ptr) {
+    if (!ptr) { return 0; };
+    return (MEM_ReadInt (ptr) == oCMobLadder_vtbl);
 };
 
 func int Hlp_Is_oCNpc (var int ptr) {
