@@ -1,3 +1,4 @@
+//suppress: W1
 //#################################################################
 //
 //  32 bit IEEE 754 floats (kurz: Gleitkommazahlen) für Daedalus:
