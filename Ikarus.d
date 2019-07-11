@@ -1,4 +1,4 @@
-//suppress: W1
+//! suppress: W1
 //######################################################
 //
 //  Kern des Skriptpakets "Ikarus"
@@ -3549,10 +3549,10 @@ func void MEMINT_PrepareLoopsAndJumps(var int stackPos) {
 
 class C_Label {}; /* so it is possible to declare var C_Label lbl */
 
-const int break = -42;
-const int continue = -23;
+const int break = -42; //! suppress: W2
+const int continue = -23; //! suppress: W2
 const int end = -72;
-func void while(var int b) {
+func void while(var int b) { //! suppress: W2
     /* consistency check */
     var int calledFrom; calledFrom = MEM_GetCallerStackPos() - 5;
     if (MEM_ReadByte(calledFrom +     currParserStackAddress) != zPAR_TOK_CALL)
