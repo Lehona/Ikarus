@@ -3426,7 +3426,7 @@ func void MEMINT_PrepareLoopsAndJumps(var int stackPos) {
     MEM_ArrayFree(usedLabels  );
     
     /* Handle while */
-    var int whileOffset;  whileOffset  = MEM_GetFuncOffset(while);
+    var int whileOffset;  whileOffset  = MEM_GetFuncOffset(_while);
     var int repeatOffset; repeatOffset = MEM_GetFuncOffset(repeat);
     var int endID;        endID        = MEM_FindParserSymbol("END");
     var int breakID;      breakID      = MEM_FindParserSymbol("BREAK");
@@ -3549,14 +3549,14 @@ func void MEMINT_PrepareLoopsAndJumps(var int stackPos) {
 
 class C_Label {}; /* so it is possible to declare var C_Label lbl */
 
-const int break = -42; //! suppress: W2
-const int continue = -23; //! suppress: W2
+const int _break = -42;
+const int _continue = -23;
 const int end = -72;
-func void while(var int b) { //! suppress: W2
+func void _while(var int b) {
     /* consistency check */
     var int calledFrom; calledFrom = MEM_GetCallerStackPos() - 5;
     if (MEM_ReadByte(calledFrom +     currParserStackAddress) != zPAR_TOK_CALL)
-    || (MEM_ReadInt (calledFrom + 1 + currParserStackAddress) != MEM_GetFuncOffset(while)) {
+    || (MEM_ReadInt (calledFrom + 1 + currParserStackAddress) != MEM_GetFuncOffset(_while)) {
         MEM_Error("while: While was called in an unorthodox way! This cannot be handled.");
         return;
     };
