@@ -3757,7 +3757,11 @@ func void MEM_InitGlobalInst() {
     MEM_Vobtree = _^(MEM_Game._zCSession_world + 36); //+ 0x0024
 
     //InfoManager:
-    MEM_InfoMan = _^(MEM_Game.infoman);
+    if (MEM_Game.infoman) {
+        MEM_InfoMan = _^(MEM_Game.infoman);
+    } else {
+        MEM_AssignInstNull (MEM_InfoMan);
+    };
 
     //InformationManager
     MEM_InformationMan = _^(MEMINT_oCInformationManager_Address);
@@ -3780,7 +3784,11 @@ func void MEM_InitGlobalInst() {
     };
 
     //Spawnmanager
-    MEM_SpawnManager = _^(MEM_Game.spawnman);
+    if (MEM_Game.spawnman) {
+        MEM_SpawnManager = _^(MEM_Game.spawnman);
+    } else {
+        MEM_AssignInstNull (MEM_SpawnManager);
+    };
 
     //zTimer:
     MEM_Timer = _^(MEMINT_zTimer_Address);
