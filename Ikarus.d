@@ -4532,13 +4532,24 @@ func int MEM_GetSecondaryKey(var string name) {
 
 func string MEMINT_ByteToKeyHex(var int byte) {
     const int ASCII_0 = 48;
+    const int ASCII_A = 65;
     byte = byte & 255;
     
+    // Fix ASCII characters (A to F)
+    var int c1; c1 = (byte >> 4);
+    if (c1 >= 10) {
+        c1 += ASCII_A-ASCII_0-10;
+    };
+    var int c2; c2 = (byte & 15);
+    if (c2 >= 10) {
+        c2 += ASCII_A-ASCII_0-10;
+    };
+
     const int mem = 0;
     if (!mem) { mem = MEM_Alloc(3); };
     
-    MEM_WriteByte(mem    , (byte >>  4) + ASCII_0);
-    MEM_WriteByte(mem + 1, (byte &  15) + ASCII_0);
+    MEM_WriteByte(mem    , c1 + ASCII_0);
+    MEM_WriteByte(mem + 1, c2 + ASCII_0);
     return STR_FromChar(mem);
 };
 
