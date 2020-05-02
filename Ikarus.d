@@ -4481,11 +4481,14 @@ func void MEM_ApplyGothOpt() {
 
 func int MEMINT_HexCharToInt(var int c) {
     const int ASCII_a = 97;
+    const int ASCII_A_ = 65;
     const int ASCII_0 = 48;
     if (c >= ASCII_0 && c < ASCII_0 + 10) {
         return c - ASCII_0;
     } else if (c >= ASCII_a && c < ASCII_a + 6) {
         return 10 + c - ASCII_a;
+    } else if (c >= ASCII_A_ && c < ASCII_A_ + 6) {
+        return 10 + c - ASCII_A_;
     } else {
         MEM_Error(ConcatStrings("Invalid Hex Char: ", IntToString(c)));
         return 0;
