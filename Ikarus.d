@@ -2726,6 +2726,23 @@ func string STR_Upper(var string str) {
     return str;
 };
 
+func string STR_Lower(var string str) {
+    const int zSTRING__Lower_G1 = 4608640; //0x465280
+    const int zSTRING__Lower_G2 = 4631024; //0x46A9F0
+
+    var int ptr; ptr = _@s(str);
+
+    const int call = 0;
+    if (CALL_Begin(call)) {
+        CALL_PutRetValTo(0);
+        CALL__thiscall(_@(ptr), MEMINT_SwitchG1G2(zSTRING__Lower_G1, zSTRING__Lower_G2));
+
+        call = CALL_End();
+    };
+
+    return str;
+};
+
 //######################################################
 //
 //  More elaborate zCParser related functions
