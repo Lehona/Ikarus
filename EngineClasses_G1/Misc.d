@@ -331,6 +331,29 @@ class zString {
 const int sizeof_zString = 20;
 
 //--------------------------------------
+// oCLogTopic
+//--------------------------------------
+
+class oCLogTopic {
+    var string          m_strDescription;
+    var int             m_enuSection    ; //LOG_MISSION / LOG_NOTE
+    var int             m_enuStatus     ; //LOG_RUNNING /
+
+    //zCList<zString> m_lstEntries;
+        var int m_lstEntries_data; //zString*
+        var int m_lstEntries_next; //zCList<zString>*
+};
+
+/* oCLogManager == zCList<oCLogTopic> */
+
+class oCLogManager {
+    var int data; //oCLogTopic*
+    var int next; //zCList<oCLogTopic>*
+};
+
+const int oCLogManager_Ptr = 10328172; //0x9D986C
+
+//--------------------------------------
 // zERROR
 //--------------------------------------
 
