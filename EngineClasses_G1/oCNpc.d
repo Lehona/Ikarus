@@ -521,6 +521,23 @@ class oCNpc
 };
 const int sizeof_oCNpc = 2616;                                       // 0x0A38
 
+//************************************************
+//   Talente sehen so aus:
+//************************************************
+
+class oCNpcTalent {
+  //zCObject {
+  var int    _vtbl;
+  var int    _zCObject_refCtr;
+  var int    _zCObject_hashIndex;
+  var int    _zCObject_hashNext;
+  var string _zCObject_objectName;
+  //}
+    var int m_talent;  //int //welches Talent? selbe Konstanten wie in Constants.d (z.B: NPC_TALENT_1H)
+    var int m_skill;   //int
+    var int m_value;   //int
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 //                                   oCNews                                   //
