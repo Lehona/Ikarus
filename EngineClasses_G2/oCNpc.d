@@ -513,13 +513,21 @@ class oCNpc
   var int    soundVob;                                                  // 0x09F0 zCVob*
   var int    soundPosition[3];                                          // 0x09F4 zVEC3
   var int    playerGroup;                                               // 0x0A00 zCPlayerGroup*
-};                                                                      // 0x0A04
+};
+const int sizeof_oCNpc = 2564;                                          // 0x0A04
 
 //************************************************
 //   Talente sehen so aus:
 //************************************************
 
 class oCNpcTalent {
+	//zCObject {
+	var int    _vtbl;
+	var int    _zCObject_refCtr;
+	var int    _zCObject_hashIndex;
+	var int    _zCObject_hashNext;
+	var string _zCObject_objectName;
+	//}
 	var int m_talent;  //int //welches Talent? selbe Konstanten wie in Constants.d (z.B: NPC_TALENT_1H)
 	var int m_skill;   //int				
 	var int m_value;   //int				
