@@ -4,9 +4,14 @@
 //      Der Outdoor Skycontroller ist der speziellste
 //      aller SkyController.
 //
+// Update: Falsch! Noch spezieller ist der
+// oCSkyControler_Barrier. Ich werden diesen hier aber
+// nicht umbenennen sondern die Barrier Eigenschaften
+// einfach unten dran fügen.
 //######################################################
 
-class zCSkyController_Outdoor {
+
+class zCSkyController_Outdoor /* eigentlich oCSkyControler_Barrier */ {
     //zCObject {
     var int    _vtbl;
     var int    _zCObject_refCtr;
@@ -173,4 +178,7 @@ class zCSkyController_Outdoor {
         var int rainFX_timeStartRain;                   //zREAL                      
         var int rainFX_timeStopRain;                    //zREAL                      
     //} rainFX;
+
+    var int barrier;    //oCBarrier *
+    var int bFadeInOut; //zBOOL
 };
