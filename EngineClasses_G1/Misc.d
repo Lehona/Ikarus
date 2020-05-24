@@ -84,6 +84,54 @@ class zMATRIX4 {
     var int trafo[16]; //zREAL[16]
 };
 
+class zCMaterial {
+    //zCObject {
+      var int    _vtbl;
+      var int    _zCObject_refCtr;
+      var int    _zCObject_hashIndex;
+      var int    _zCObject_hashNext;
+      var string _zCObject_objectName;
+
+    //zCArray<zCPolygon*>       polyList;
+        var int polyList_array;         //zCPolygon**
+        var int polyList_numAlloc;      //int
+        var int polyList_numInArray;    //int
+
+    var int polyListTimeStamp;          //zDWORD
+    var int texture;                    //zCTexture*
+    var int color;                      //zCOLOR
+    var int smoothAngle;                //zREAL
+    var int matGroup;                   //zTMat_Group
+    var int bspSectorFront;             //zCBspSector*   //outdoor
+    var int bspSectorBack;              //zCBspSector*   //outdoor
+    var int texAniCtrl;                 //zCTexAniCtrl
+    var int detailObjectVisualName;     //zSTRING*
+
+    var int kambient;                        //zREAL
+    var int kdiffuse;                        //zREAL
+
+    var int bitfield[6]; //???
+
+    /*
+        zUINT8               smooth                 : 1;
+        zUINT8               dontUseLightmaps       : 1;
+        zUINT8               texAniMap              : 1;
+        zUINT8               lodDontCollapse        : 1;
+        zUINT8               noCollDet              : 1;
+        zUINT8               polyListNeedsSort      : 1;
+        zUINT8               matUsage               : 8;
+        zUINT8               libFlag                : 8;
+        zTRnd_AlphaBlendFunc rndAlphaBlendFunc      : 8;
+    */
+
+    var int detailTexture;                   //zCTexture*
+    var int detailTextureScale;              //zREAL
+    var int texAniMapDelta[2];               //zPOINT2
+
+    var int default_mapping[2];              //zPOINT2
+    var int texScale[2];                     //zPOINT2
+};
+
 class zCBspSector {
     var string sectorName;             //zSTRING
 
