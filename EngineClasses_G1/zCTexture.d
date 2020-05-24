@@ -25,6 +25,38 @@ class zCResource {
 };
 
 
+const int zCTexture_bitfield_hasAlpha            = 1 <<  0;
+const int zCTexture_bitfield_isAnimated          = 1 <<  8;
+const int zCTexture_bitfield_changingRealtime    = 1 << 16;
+const int zCTexture_bitfield_isTextureTile       = 1 << 24;
+
+class zCTexture {
+    //zCObject {
+      var int    _vtbl;
+      var int    _zCObject_refCtr;
+      var int    _zCObject_hashIndex;
+      var int    _zCObject_hashNext;
+      var string _zCObject_objectName;
+
+    //zCResource
+      var int _zCResource_nextRes;
+      var int _zCResource_prevRes;
+      var int _zCResource_timeStamp;
+      var int _zCResource_stateChangeGuard_vbtl;
+      var int _zCResource_stateChangeGuard_criticalSection[6];
+      var int _zCResource_bitfield[2];
+
+    //zCTextureExchange
+      var int _zCTextureExchange_vtbl;
+
+    var int nextAni     [3]; //zCTexture*
+    var int prevAni     [3]; //zCTexture*
+    var int actAniFrame [3]; //int
+    var int numAniFrames[3]; //int
+
+    var int bitfield;
+};
+
 const int zCTex_D3D_bitfield_xtex_decompress = ((1 <<  1) - 1) << 17;
 const int zCTex_D3D_bitfield_xtex_locked     = ((1 <<  1) - 1) << 18;
 const int zCTex_D3D_bitfield_xtex_palsupport = ((1 <<  1) - 1) << 19;
