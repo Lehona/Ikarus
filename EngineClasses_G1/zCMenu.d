@@ -91,6 +91,27 @@ class zCMenu {
     //[/oCMenu_Status_only]
 };
 
+//Danke an Nico für die folgenden drei Klassen:
+class oSMenuInfoAttribute {
+    var string Name;
+    var string Description;
+    var int    Value;
+    var int    MaxValue;
+    var int    Type;  // 0 = HP, 1 = DEX, 2 = MANA, 3 = STR
+};
+
+class oSMenuInfoTalent {
+    var string Name;
+    var string Description;
+    var string SkillEnum;
+    var int    Value;
+    var int    Skill;
+};
+
+class oSMenuInfoArmor {
+    var int Value;  // 0 = 1H, 1 = 2H, 2 = BOW, 3 = CROSSBOW
+};
+
 //#################################################################
 //
 //  zCView: Basis für viele Anzeigeelemente //sollte jetzt auch für G1 korrekt sein.
