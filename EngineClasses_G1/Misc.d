@@ -84,6 +84,52 @@ class zMATRIX4 {
     var int trafo[16]; //zREAL[16]
 };
 
+//------------------------------------------------
+//  zCPolygon
+//------------------------------------------------
+
+/* Bedeutung von zCPolygon.portalPoly:
+
+    enum zTPortalType   { zPORTAL_TYPE_NONE         = 0,
+                          zPORTAL_TYPE_SMALL        = 1,
+                          zPORTAL_TYPE_BIG          = 2,
+                          zPORTAL_TYPE_BIG_NOFADE   = 3
+                        };
+*/
+const int zCPolygon_bitfield_polyNumVert            = ((1 <<  8) - 1) <<  0;
+const int zCPolygon_bitfield_portalPoly             = ((1 <<  2) - 1) <<  8;
+const int zCPolygon_bitfield_occluder               = ((1 <<  1) - 1) << 10;
+const int zCPolygon_bitfield_sectorPoly             = ((1 <<  1) - 1) << 11;
+const int zCPolygon_bitfield_mustRelight            = ((1 <<  1) - 1) << 12;
+const int zCPolygon_bitfield_portalIndoorOutdoor    = ((1 <<  1) - 1) << 13;
+const int zCPolygon_bitfield_ghostOccluder          = ((1 <<  1) - 1) << 14;
+const int zCPolygon_bitfield_normalMainAxis         = ((1 <<  2) - 1) << 16; //G1 only
+const int zCPolygon_bitfield_sectorIndex            = ((1 <<  8) - 1) << 24; //indoor only
+const int zCPolygon_bitfield1_sectorIndex           = ((1 <<  8) - 1) <<  0; //continued
+/* sectorIndex is split between bitfield[0] and bitfield[1]. Access like so:
+    ((bitfield[0] & zCPolygon_bitfield_sectorIndex) << 8) + (bitfield[1] & zCPolygon_bitfield1_sectorIndex)
+*/
+
+class zCPolygon
+{
+/*0x0000*/    var int vertex;                 //zCVertex** //array
+/*0x0004*/    var int lastTimeDrawn;          //int
+
+              //zTPlane               polyPlane;
+/*0x0008*/        var int polyPlane_distance;     //zREAL
+/*0x000C*/        var int polyPlane_normal[3];    //zVEC3
+
+/*0x0018*/    var int material;               //zCMaterial*
+/*0x001C*/    var int lightmap;               //zCLightMap*
+
+/*0x0020*/    var int clipVert;               //zCVertex      **
+/*0x0024*/    var int clipFeat;               //zCVertFeature **
+/*0x0028*/    var int numClipVert;            //int
+
+/*0x002C*/    var int feature;                //zCVertFeature ** //array
+/*0x0030*/    var int bitfield[1];
+};
+
 class zCMaterial {
     //zCObject {
       var int    _vtbl;
