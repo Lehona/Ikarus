@@ -197,6 +197,11 @@ class zCMaterial {
     var int texScale[2];                     //zPOINT2
 };
 
+class zTPortalInfo {
+    var int visible;        //zBYTE
+    var int alpha;          //zBYTE
+};
+
 class zCBspSector {
     var string sectorName;             //zSTRING
 
