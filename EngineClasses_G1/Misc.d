@@ -85,6 +85,29 @@ class zMATRIX4 {
 };
 
 //--------------------------------------
+// Portalzeug
+//--------------------------------------
+
+class oCPortalRoom {
+    var string portalName;    //zSTRING
+    var string ownerNpc;      //zSTRING
+    var int ownerGuild;    //int
+};
+
+class oCPortalRoomManager {
+    var int oldPlayerPortal;    //zSTRING*
+    var int curPlayerPortal;    //zSTRING*
+    var int oldPlayerRoom;      //oCPortalRoom*
+    var int curPlayerRoom;      //oCPortalRoom*
+
+    //zCArraySort <oCPortalRoom*> portals;
+        var int portals_array;      //oCPortalRoom**
+        var int portals_numAlloc;   //int
+        var int portals_numInArray; //int
+        var int portals_compare;    //int (*Compare)(const oCPortalRoom* ele1,const oCPortalRoom* ele2);
+};
+
+//--------------------------------------
 // Timer (technisch und spieltechnisch)
 //--------------------------------------
 
@@ -97,6 +120,9 @@ class zCTimer {
     var int totalTime;           //zDWORD [msec]
     var int minFrameTime;        //zDWORD       //antifreeze. Sonst wird die Framezeit auf 0 gerundet und nichts bewegt sich
 };
+
+const int oCWorldTimer_TicksPerHour       = 250000;
+const int oCWorldTimer_TicksPerMin_approx = 4167; //< 1 sec / Tag daneben
 
 class oCWorldTimer {
     //250000 Ticks pro Stunde
@@ -132,29 +158,6 @@ class oCSpawnManager {
     var int spawningEnabled;        //zBOOL
     var int camPos[3];              //zVEC3
     var int insertTime;             //zREAL //Verzögerungszeit des Spawnmanagers (Performancegründe)
-};
-
-//--------------------------------------
-// Portalzeug
-//--------------------------------------
-
-class oCPortalRoom {
-    var string portalName;    //zSTRING 
-    var string ownerNpc;      //zSTRING 
-    var int ownerGuild;    //int           
-};
-
-class oCPortalRoomManager {
-    var int oldPlayerPortal;    //zSTRING*      
-    var int curPlayerPortal;    //zSTRING*      
-    var int oldPlayerRoom;      //oCPortalRoom*
-    var int curPlayerRoom;      //oCPortalRoom*
-
-    //zCArraySort <oCPortalRoom*> portals;
-        var int portals_array;      //oCPortalRoom**
-        var int portals_numAlloc;   //int
-        var int portals_numInArray; //int
-        var int portals_compare;    //int (*Compare)(const oCPortalRoom* ele1,const oCPortalRoom* ele2);
 };
 
 //--------------------------------------
