@@ -84,6 +84,35 @@ class zMATRIX4 {
     var int trafo[16]; //zREAL[16]
 };
 
+class zCBspSector {
+    var string sectorName;             //zSTRING
+
+    //zCArray<zCBspBase*>               sectorNodes;
+        var int sectorNodes_array;        //zCBspBase**
+        var int sectorNodes_numAlloc;    //int
+        var int sectorNodes_numInArray;  //int
+
+    var int sectorIndex;                //zDWORD
+
+    //zCArray<zCPolygon*>               sectorPortals;
+        var int sectorPortals_array;        //zCPolygon**
+        var int sectorPortals_numAlloc;    //int
+        var int sectorPortals_numInArray;  //int
+
+    //zCArray<zTPortalInfo>         sectorPortalInfo;
+        var int sectorPortalInfo_array;      //zTPortalInfo*
+        var int sectorPortalInfo_numAlloc;  //int
+        var int sectorPortalInfo_numInArray;//int
+
+    var int activated;          //zTFrameCtr
+    var int rendered;           //zTFrameCtr
+    //zTBBox2D   activePortal;
+        var int mins[2];                //zVEC2
+        var int maxs[2];                //zVEC2
+    var int sectorCenter[3];    //zVEC3
+    var int hasBigNoFade;       //zBOOL8
+};
+
 //--------------------------------------
 // Portalzeug
 //--------------------------------------
