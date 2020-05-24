@@ -157,7 +157,7 @@ class zCViewText {
 
 class zCView {
     var int _vtbl;
-    var int _zCInputCallback_vtbl;
+    var int _zCInputCallBack_vtbl;
     /*
     enum zEViewFX
     {
@@ -269,7 +269,7 @@ const int MAX_EVENTS      = 10;
 
 class zCMenuItem {
     var int zCView__vtbl;
-    var int zCInputCallback_vtbl;
+    var int zCInputCallBack_vtbl;
     //var int m_bFillZ;               //zBOOL //G2 only
     var int zCView_next;        
     var int zCView_viewID;      
@@ -280,10 +280,10 @@ class zCMenuItem {
     var int zCView_color;       
     var int zCView_alpha;       
     var int zCView_compare; 
-    var int zCView_count;       
-    var int zCView_last;        
-    var int zCView_wurzel;      
-    var int zCView_owner;       
+    var int zCView_childs_count;      // Previously zCView_count !
+    var int zCView_childs_last;       // Previously zCView_last !
+    var int zCView_childs_wurzel;     // Previously zCView_wurzel !
+    var int zCView_childs_owner;      // Previously zCView_owner !
     var int zCView_backTex; 
     var int zCView_vposx;       
     var int zCView_vposy;       
@@ -395,7 +395,7 @@ class zCMenuItem {
 class oCViewStatusBar
 {
     var int zCView__vtbl;
-    var int zCInputCallback_vtbl;
+    var int zCInputCallBack_vtbl;
     //var int m_bFillZ;               //zBOOL //G2 only
     var int zCView_next;        
     var int zCView_viewID;      
@@ -406,10 +406,10 @@ class oCViewStatusBar
     var int zCView_color;       
     var int zCView_alpha;       
     var int zCView_compare; 
-    var int zCView_count;       
-    var int zCView_last;        
-    var int zCView_wurzel;      
-    var int zCView_owner;       
+    var int zCView_childs_count;      // Previously zCView_count !
+    var int zCView_childs_last;       // Previously zCView_last !
+    var int zCView_childs_wurzel;     // Previously zCView_wurzel !
+    var int zCView_childs_owner;      // Previously zCView_owner !
     var int zCView_backTex; 
     var int zCView_vposx;       
     var int zCView_vposy;       
