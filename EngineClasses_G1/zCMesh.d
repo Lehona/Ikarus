@@ -1,3 +1,16 @@
+class zCVisual {
+    var int    _vtbl;
+    var int    _zCObject_refCtr;
+    var int    _zCObject_hashIndex;
+    var int    _zCObject_hashNext;
+    var string _zCObject_objectName;
+
+    var int nextLODVisual;          //zCVisual*
+    var int prevLODVisual;          //zCVisual*
+    var int lodFarDistance;         //zREAL
+    var int lodNearFadeOutDistance;    //zREAL
+};
+
 class zCMesh {
     var int    _vtbl;
     var int    _zCObject_refCtr;
