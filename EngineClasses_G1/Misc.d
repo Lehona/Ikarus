@@ -85,6 +85,16 @@ class zMATRIX4 {
 };
 
 //------------------------------------------------
+//  zTPlane: Ebene im Raum
+//------------------------------------------------
+
+class zTPlane
+{
+    var int distance;    //zREAL    //vermutlich Distanz zum Ursprung (was sonst?)
+    var int normal[3];   //zPOINT3  //normalenvektor
+};
+
+//------------------------------------------------
 //  zCPolygon
 //------------------------------------------------
 
