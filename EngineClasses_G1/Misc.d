@@ -117,15 +117,13 @@ class oCWorldTimer {
 
  * Eingeführt sind sie in Ikarus_Const.d */
 
-class oCSpawnManager
-{
-    /*
-    typedef struct oSSpawnNode{
-        oCNpc*      npc;
-        zVEC3       spawnPos;
-        zREAL       timer;
-    } oTSpawnNode; */
+class oTSpawnNode {
+    var int npc;         //oCNpc *
+    var int spawnPos[3]; //zVEC3
+    var int timer;       //zREAL
+};
 
+class oCSpawnManager {
     //zCArray<oTSpawnNode*> spawnList;
         var int spawnList_array;        //oTSpawnNode**
         var int spawnList_numAlloc;     //int
