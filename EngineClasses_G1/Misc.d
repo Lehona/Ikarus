@@ -110,6 +110,15 @@ const int zCPolygon_bitfield1_sectorIndex           = ((1 <<  8) - 1) <<  0; //c
     ((bitfield[0] & zCPolygon_bitfield_sectorIndex) << 8) + (bitfield[1] & zCPolygon_bitfield1_sectorIndex)
 */
 
+class zCVertFeature {
+    var int vertNormal[3];    //zPOINT3
+    var int lightStat;        //zCOLOR
+    var int lightDyn;         //zCOLOR
+    var int texu;             //zVALUE
+    var int texv;             //zVALUE
+    var int _empty;           //zVALUE //Padding?
+};
+
 class zCPolygon
 {
 /*0x0000*/    var int vertex;                 //zCVertex** //array
