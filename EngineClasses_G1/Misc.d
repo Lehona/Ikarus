@@ -488,6 +488,52 @@ class zString {
 const int sizeof_zString = 20;
 
 //--------------------------------------
+// zCClassDef
+//--------------------------------------
+
+/* Für jede (von zCObject abgeleitete) Klasse gibt es
+ * ein "Verwaltungsobjekt" vom Typ zCClassDef.
+ * Dieses kapselt einige nützliche Informationen zu der
+ * Gesamtheit der Objekte dieser Klasse.
+ * Mit MEM_GetClassDef (var int objPtr) kann das
+ * zu einem Objekt gehörige zCClassDef Objekt bestimmt
+ * werden. Das heißt für ein übergebenes Vob, bekäme
+ * man zCClassDef für die Klasse zCVob.
+ */
+
+class zCClassDef {
+    var string className;            //zSTRING
+    var string baseClassName;        //zSTRING
+    var string scriptClassName;      //zSTRING
+    var int baseClassDef;            //zCClassDef* //davon abgeleitet
+
+    var int createNewInstance;       //zCObject* ( *) (void) //Pointer auf klassenspezifische Funktion
+    var int createNewInstanceBackup; //zCObject* ( *) (void) //Pointer auf klassenspezifische Funktion
+
+    /*
+    enum zTClassFlags {
+        zCLASS_FLAG_SHARED_OBJECTS      = 1<<0, //Mehrfach benutzt Objekte (wie Visuals zum Beispiel)
+        zCLASS_FLAG_TRANSIENT           = 1<<1, //Flüchtig, soll nicht gespeichert werden.
+        zCLASS_FLAG_RESOURCE            = 1<<2, //keine Ahnung / vermutlich irrelevant
+    };*/
+
+    var int classFlags;              //zDWORD //siehe enum
+    var int classSize;               //zDWORD //Größe in Bytes
+
+    var int numLivingObjects;        //Anzahl Objekte von dieser Klasse
+    var int numCtorCalled;           //Konstruktor wurde sooft aufgerufen
+
+    var int hashTable;               //zCObject** //Hashtabelle der Größe 1024. Objekte sind mit zCObject.hashNext verknüpft, falls mehrere auf den selben Wert hashen.
+    //zCArray<zCObject*> objectList;    //alle benannten (!) Objekte von genau (!) dieser Klasse (!) //Ausrufezeichenanmerkungen: 1.) unbenannte sind nicht drin 2.) Objekte von Unterklassen sind nicht drin 3.) diese Eigenschaft kann sehr nützlich sein.
+        var int objectList_array;       //zCObject**
+        var int objectList_numAlloc;    //int
+        var int objectList_numInArray;  //int
+
+    var int archiveVersion;          //zWORD //vermutlich nutzlos
+    var int archiveVersionSum;       //zWORD //vermutlich nutzlos
+};
+
+//--------------------------------------
 // oCLogTopic
 //--------------------------------------
 
