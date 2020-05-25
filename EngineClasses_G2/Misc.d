@@ -535,6 +535,9 @@ const int sizeof_zString = 20;
  * man zCClassDef für die Klasse zCVob.
  */
 
+const int zCClassDef_bitfield_archiveVersion    = ((1 << 16) - 1) <<  0; //zWORD
+const int zCClassDef_bitfield_archiveVersionSum = ((1 << 16) - 1) << 16; //zWORD
+
 class zCClassDef {
     var string className;            //zSTRING
     var string baseClassName;        //zSTRING
@@ -563,8 +566,7 @@ class zCClassDef {
         var int objectList_numAlloc;    //int
         var int objectList_numInArray;  //int
     
-    var int archiveVersion;          //zWORD //vermutlich nutzlos
-    var int archiveVersionSum;       //zWORD //vermutlich nutzlos
+    var int bitfield;
 };      
 
 //--------------------------------------
