@@ -4,9 +4,14 @@
 //      Der Outdoor Skycontroller ist der speziellste
 //      aller SkyController.
 //
+// Update: Falsch! Noch spezieller ist der
+// oCSkyControler_Barrier. Ich werden diesen hier aber
+// nicht umbenennen sondern die Barrier Eigenschaften
+// einfach unten dran fügen.
 //######################################################
 
-class zCSkyController_Outdoor {
+
+class zCSkyController_Outdoor /* eigentlich oCSkyControler_Barrier */ {
     //zCObject {
     var int    _vtbl;
     var int    _zCObject_refCtr;
@@ -173,4 +178,62 @@ class zCSkyController_Outdoor {
         var int rainFX_timeStartRain;                   //zREAL                      
         var int rainFX_timeStopRain;                    //zREAL                      
     //} rainFX;
+
+    var int barrier;    //oCBarrier *
+    var int bFadeInOut; //zBOOL
+};
+
+/* Hier heran kommt man über MEM_SkyController.barrier */
+
+class oCBarrier {
+    var int skySphereMesh;             //zCMesh*
+
+    var int myPolyList;                //myPoly*
+    var int myVertList;                //myVert*
+
+    var int numMyVerts;                //int
+    var int numMyPolys;                //int
+
+    var int myThunderList;             //myThunder*
+    var int numMaxThunders;            //int
+    var int numMyThunders;             //int
+
+    var int actualIndex;               //int
+    var int rootBoltIndex;             //int
+
+    var int startPointList1[10];       //int
+    var int numStartPoints1;           //int
+    var int startPointList2[10];       //int
+    var int numStartPoints2;           //int
+    var int startPointList3[10];       //int
+    var int numStartPoints3;           //int
+    var int startPointList4[10];       //int
+    var int numStartPoints4;           //int
+
+    var int topestPoint;               //int
+
+    var int bFadeInOut;                //zBOOL
+    var int fadeState;                 //int
+
+    var int fadeIn;                    //zBOOL
+    var int fadeOut;                   //zBOOL
+
+
+    var int sfx1;                      //zCSoundFX*
+    var int sfxHandle1;                //zTSoundHandle
+    var int sfx2;                      //zCSoundFX*
+    var int sfxHandle2;                //zTSoundHandle
+    var int sfx3;                      //zCSoundFX*
+    var int sfxHandle3;                //zTSoundHandle
+    var int sfx4;                      //zCSoundFX*
+    var int sfxHandle4;                //zTSoundHandle
+
+    var int thunderStartDecal;         //zCDecal*
+
+    var int activeThunder_Sector1;     //zBOOL
+    var int activeThunder_Sector2;     //zBOOL
+    var int activeThunder_Sector3;     //zBOOL
+    var int activeThunder_Sector4;     //zBOOL
+
+    var int originalTexUVList;         //zVEC2*
 };

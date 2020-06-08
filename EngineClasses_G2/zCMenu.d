@@ -393,7 +393,7 @@ class zCMenuItem {
 class oCViewStatusBar
 {
     var int zCView__vtbl;
-    var int _zCInputCallBack_vtbl;
+    var int zCInputCallBack_vtbl;    // Previously _zCInputCallBack_vtbl !
     var int zCView_m_bFillZ;    
     var int zCView_next;        
     var int zCView_viewID;      
@@ -474,7 +474,7 @@ class oCViewStatusBar
 
 class zCMenuItemText {
 	var int zCView__vtbl;
-    var int _zCInputCallBack_vtbl;
+    var int zCInputCallBack_vtbl;    // Previously _zCInputCallBack_vtbl !
     var int zCView_m_bFillZ;    
     var int zCView_next;        
     var int zCView_viewID;      

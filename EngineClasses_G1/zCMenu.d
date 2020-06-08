@@ -91,6 +91,27 @@ class zCMenu {
     //[/oCMenu_Status_only]
 };
 
+//Danke an Nico für die folgenden drei Klassen:
+class oSMenuInfoAttribute {
+    var string Name;
+    var string Description;
+    var int    Value;
+    var int    MaxValue;
+    var int    Type;  // 0 = HP, 1 = DEX, 2 = MANA, 3 = STR
+};
+
+class oSMenuInfoTalent {
+    var string Name;
+    var string Description;
+    var string SkillEnum;
+    var int    Value;
+    var int    Skill;
+};
+
+class oSMenuInfoArmor {
+    var int Value;  // 0 = 1H, 1 = 2H, 2 = BOW, 3 = CROSSBOW
+};
+
 //#################################################################
 //
 //  zCView: Basis für viele Anzeigeelemente //sollte jetzt auch für G1 korrekt sein.
@@ -136,7 +157,7 @@ class zCViewText {
 
 class zCView {
     var int _vtbl;
-    var int _zCInputCallback_vtbl;
+    var int _zCInputCallBack_vtbl;
     /*
     enum zEViewFX
     {
@@ -248,7 +269,7 @@ const int MAX_EVENTS      = 10;
 
 class zCMenuItem {
     var int zCView__vtbl;
-    var int zCInputCallback_vtbl;
+    var int zCInputCallBack_vtbl;
     //var int m_bFillZ;               //zBOOL //G2 only
     var int zCView_next;        
     var int zCView_viewID;      
@@ -259,10 +280,10 @@ class zCMenuItem {
     var int zCView_color;       
     var int zCView_alpha;       
     var int zCView_compare; 
-    var int zCView_count;       
-    var int zCView_last;        
-    var int zCView_wurzel;      
-    var int zCView_owner;       
+    var int zCView_childs_count;      // Previously zCView_count !
+    var int zCView_childs_last;       // Previously zCView_last !
+    var int zCView_childs_wurzel;     // Previously zCView_wurzel !
+    var int zCView_childs_owner;      // Previously zCView_owner !
     var int zCView_backTex; 
     var int zCView_vposx;       
     var int zCView_vposy;       
@@ -374,7 +395,7 @@ class zCMenuItem {
 class oCViewStatusBar
 {
     var int zCView__vtbl;
-    var int zCInputCallback_vtbl;
+    var int zCInputCallBack_vtbl;
     //var int m_bFillZ;               //zBOOL //G2 only
     var int zCView_next;        
     var int zCView_viewID;      
@@ -385,10 +406,10 @@ class oCViewStatusBar
     var int zCView_color;       
     var int zCView_alpha;       
     var int zCView_compare; 
-    var int zCView_count;       
-    var int zCView_last;        
-    var int zCView_wurzel;      
-    var int zCView_owner;       
+    var int zCView_childs_count;      // Previously zCView_count !
+    var int zCView_childs_last;       // Previously zCView_last !
+    var int zCView_childs_wurzel;     // Previously zCView_wurzel !
+    var int zCView_childs_owner;      // Previously zCView_owner !
     var int zCView_backTex; 
     var int zCView_vposx;       
     var int zCView_vposy;       
@@ -440,4 +461,139 @@ class oCViewStatusBar
     var string texView;              //zSTRING 
     var string texRange;             //zSTRING 
     var string texValue;             //zSTRING 
+};
+
+//#################################################################
+//
+//  Vermutlich ziemlich nutzlos, ich dachte zunächst die Klasse
+//  wäre wichtiger. Alles entscheidende spielt sich
+//  zumindest was das Charaktermenü angeht in den gewöhnlichen
+//  zCMenuItems ab. zCMenuItemText wird (nicht ausschließlich)
+//  für Auswahlboxen benutzt (In den Einstellungen: [ja|nein]-Box)
+//
+//#################################################################
+
+class zCMenuItemText {
+    var int zCView__vtbl;
+    var int zCInputCallBack_vtbl;
+    //var int m_bFillZ;               //zBOOL //G2 only
+    var int zCView_next;
+    var int zCView_viewID;
+    var int zCView_flags;
+    var int zCView_intflags;
+    var int zCView_ondesk;
+    var int zCView_alphafunc;
+    var int zCView_color;
+    var int zCView_alpha;
+    var int zCView_compare;
+    var int zCView_childs_count;
+    var int zCView_childs_last;
+    var int zCView_childs_wurzel;
+    var int zCView_childs_owner;
+    var int zCView_backTex;
+    var int zCView_vposx;
+    var int zCView_vposy;
+    var int zCView_vsizex;
+    var int zCView_vsizey;
+    var int zCView_pposx;
+    var int zCView_pposy;
+    var int zCView_psizex;
+    var int zCView_psizey;
+    var int zCView_font;
+    var int zCView_fontColor;
+    var int zCView_px1;
+    var int zCView_py1;
+    var int zCView_px2;
+    var int zCView_py2;
+    var int zCView_winx;
+    var int zCView_winy;
+    var int zCView_textLines_data;
+    var int zCView_textLines_next;
+    var int zCView_scrollMaxTime;
+    var int zCView_scrollTimer;
+    var int zCView_fxOpen        ;
+    var int zCView_fxClose       ;
+    var int zCView_timeDialog    ;
+    var int zCView_timeOpen  ;
+    var int zCView_timeClose     ;
+    var int zCView_speedOpen     ;
+    var int zCView_speedClose    ;
+    var int zCView_isOpen        ;
+    var int zCView_isClosed  ;
+    var int zCView_continueOpen ;
+    var int zCView_continueClose;
+    var int zCView_removeOnClose;
+    var int zCView_resizeOnOpen ;
+    var int zCView_maxTextLength;
+    var string zCView_textMaxLength;
+    var int zCView_posCurrent_0[2];
+    var int zCView_posCurrent_1[2];
+    var int zCView_posOpenClose_0[2];
+    var int zCView_posOpenClose_1[2];
+
+    var string _zCMenuItem_m_parFontName;
+    var string _zCMenuItem_m_parText [MAX_USERSTRINGS];
+    var string _zCMenuItem_m_parBackPic;
+    var string _zCMenuItem_m_parAlphaMode;
+    var int _zCMenuItem_m_parAlpha;
+    var int _zCMenuItem_m_parType;
+    var int _zCMenuItem_m_parOnSelAction [MAX_SEL_ACTIONS] ;
+    var string _zCMenuItem_m_parOnSelAction_S [MAX_SEL_ACTIONS];
+    var string _zCMenuItem_m_parOnChgSetOption;
+    var string _zCMenuItem_m_parOnChgSetOptionSection;
+    var int _zCMenuItem_m_parOnEventAction [MAX_EVENTS];
+    var int _zCMenuItem_m_parPosX;
+    var int _zCMenuItem_m_parPosY;
+    var int _zCMenuItem_m_parDimX;
+    var int _zCMenuItem_m_parDimY;
+    var int _zCMenuItem_m_parSizeStartScale;
+    var int _zCMenuItem_m_parItemFlags;
+    var int _zCMenuItem_m_parOpenDelayTime;
+    var int _zCMenuItem_m_parOpenDuration;
+    var int _zCMenuItem_m_parUserFloat [MAX_USERVARS];
+    var string _zCMenuItem_m_parUserString [MAX_USERVARS];
+    var int _zCMenuItem_m_parFrameSizeX;
+    var int _zCMenuItem_m_parFrameSizeY;
+    var int _zCMenuItem_m_iRefCtr;
+    var int _zCMenuItem_m_pInnerWindow;
+    var int _zCMenuItem_m_pFont;
+    var int _zCMenuItem_m_pFontHi;
+    var int _zCMenuItem_m_pFontSel;
+    var int _zCMenuItem_m_pFontDis;
+    var int _zCMenuItem_m_bViewInitialized;
+    var int _zCMenuItem_m_bLeaveItem;
+    var int _zCMenuItem_m_bVisible;
+    var int _zCMenuItem_m_listLines_array;
+    var int _zCMenuItem_m_listLines_numAlloc;
+    var int _zCMenuItem_m_listLines_numInArray;
+    var string _zCMenuItem_id;
+    var int _zCMenuItem_inserted;
+    var int _zCMenuItem_changed;
+    var int _zCMenuItem_active;
+    var int _zCMenuItem_open;
+    var int _zCMenuItem_close;
+    var int _zCMenuItem_opened;
+    var int _zCMenuItem_closed;
+    var int _zCMenuItem_disabled;
+    var int _zCMenuItem_orgWin;
+    var int _zCMenuItem_fxTimer;
+    var int _zCMenuItem_openDelayTimer;
+    var int _zCMenuItem_activeTimer;
+    var int _zCMenuItem_registeredCPP;
+    var int _zCMenuItem_firstTimeInserted;
+
+    /*  enum {
+            MODE_SIMPLE,
+            MODE_ENUM,
+            MODE_MULTILINE
+    } */
+    var int m_mode; //siehe enum
+
+    var string m_fullText;      //zSTRING
+    var int m_numOptions;       //int //Relevant für Options-Menüitems wo man zum Beispiel zwischen "aus" und "an" wählen kann.
+
+    var int m_topLine;          //int
+    var int m_viewLines;        //int
+    var int m_numLines;         //int
+    var int m_unformated;       //zBOOL
 };

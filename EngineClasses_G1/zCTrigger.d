@@ -193,6 +193,14 @@ class oCTriggerChangeLevel {
 
 const int zCMover_bitfield_moverLocked     = ((1 << 1) - 1) <<  0;
 const int zCMover_bitfield_autoLinkEnabled = ((1 << 1) - 1) <<  8;
+const int sizeof_zCMover = 624;
+
+class zTMov_Keyframe {
+    var int pos[3];         //zPOINT3
+    var int quat[4];        //zCQuat
+};
+
+const int sizeof_zTMov_KeyFrame = 28;
 
 class zCMover {
 //  zCVob {

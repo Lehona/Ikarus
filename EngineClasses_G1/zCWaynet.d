@@ -128,3 +128,16 @@ class zCWayNet {
         
     var int routeCtr;                       //int
 };
+
+class zCRoute {
+    var int _vtbl;
+
+    //var int wayList;   //zCList <zCWay>
+        var int wayList_data; //zCWay*
+        var int wayList_next; //zCList<zCWay>*
+
+    var int startwp;   //zCWaypoint*
+    var int target;    //zCWaypoint*
+    var int way;       //zCWay*
+    var int waynode;   //zCList <zCWay>*
+};

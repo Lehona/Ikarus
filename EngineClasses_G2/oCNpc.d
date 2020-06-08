@@ -107,7 +107,8 @@ class zCVob
   var int    bitfield[5];               // 0x0104 zCVob_bitfieldX_Xxx
   var int    m_poCollisionObjectClass;  // 0x0118 zCCollisionObjectDef*
   var int    m_poCollisionObject;       // 0x011C zCCollisionObject*
-};                                      // 0x0120
+};
+const int sizeof_zCVob = 288;           // 0x0120
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
@@ -513,14 +514,45 @@ class oCNpc
   var int    soundVob;                                                  // 0x09F0 zCVob*
   var int    soundPosition[3];                                          // 0x09F4 zVEC3
   var int    playerGroup;                                               // 0x0A00 zCPlayerGroup*
-};                                                                      // 0x0A04
+};
+const int sizeof_oCNpc = 2564;                                          // 0x0A04
 
 //************************************************
 //   Talente sehen so aus:
 //************************************************
 
 class oCNpcTalent {
+	//zCObject {
+	var int    _vtbl;
+	var int    _zCObject_refCtr;
+	var int    _zCObject_hashIndex;
+	var int    _zCObject_hashNext;
+	var string _zCObject_objectName;
+	//}
 	var int m_talent;  //int //welches Talent? selbe Konstanten wie in Constants.d (z.B: NPC_TALENT_1H)
 	var int m_skill;   //int				
 	var int m_value;   //int				
 };
+
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                                   oCNews                                   //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
+class oCNews {
+    var int    _vtbl;         // 0x0000
+    var int    told;          // 0x0004 zBOOL
+    var int    spread_time;   // 0x0008 zREAL
+    var int    spreadType;    // 0x000C oTNewsSpreadType
+    var int    news_id;       // 0x0010 int
+    var int    gossip;        // 0x0014 zBOOL
+    var int    mNpcWitness;   // 0x0018 oCNpc*
+    var int    mNpcOffender;  // 0x001C oCNpc*
+    var int    mNpcVictim;    // 0x0020 oCNpc*
+    var string witnessName;   // 0x0024 zSTRING
+    var string offenderName;  // 0x0038 zSTRING
+    var string victimName;    // 0x004C zSTRING
+    var int    guildvictim;   // 0x0060 zBOOL
+};
+const int sizeof_oCNews = 100;  // 0x0064

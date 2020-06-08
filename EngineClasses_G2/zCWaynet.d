@@ -136,6 +136,8 @@ class zCWayNet {
 };
 
 class zCRoute {
+    var int _vtbl;
+
 	//var int wayList;   //zCList <zCWay>	
         var int wayList_data; //zCWay*
         var int wayList_next; //zCList<zCWay>*

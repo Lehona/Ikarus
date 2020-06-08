@@ -84,6 +84,185 @@ class zMATRIX4 {
     var int trafo[16]; //zREAL[16]
 };
 
+//------------------------------------------------
+//  zTPlane: Ebene im Raum
+//------------------------------------------------
+
+class zTPlane
+{
+    var int distance;    //zREAL    //vermutlich Distanz zum Ursprung (was sonst?)
+    var int normal[3];   //zPOINT3  //normalenvektor
+};
+
+//------------------------------------------------
+//  zCPolygon
+//------------------------------------------------
+
+/* Bedeutung von zCPolygon.portalPoly:
+
+    enum zTPortalType   { zPORTAL_TYPE_NONE         = 0,
+                          zPORTAL_TYPE_SMALL        = 1,
+                          zPORTAL_TYPE_BIG          = 2,
+                          zPORTAL_TYPE_BIG_NOFADE   = 3
+                        };
+*/
+const int zCPolygon_bitfield_polyNumVert            = ((1 <<  8) - 1) <<  0;
+const int zCPolygon_bitfield_portalPoly             = ((1 <<  2) - 1) <<  8;
+const int zCPolygon_bitfield_occluder               = ((1 <<  1) - 1) << 10;
+const int zCPolygon_bitfield_sectorPoly             = ((1 <<  1) - 1) << 11;
+const int zCPolygon_bitfield_mustRelight            = ((1 <<  1) - 1) << 12;
+const int zCPolygon_bitfield_portalIndoorOutdoor    = ((1 <<  1) - 1) << 13;
+const int zCPolygon_bitfield_ghostOccluder          = ((1 <<  1) - 1) << 14;
+const int zCPolygon_bitfield_normalMainAxis         = ((1 <<  2) - 1) << 16; //G1 only
+const int zCPolygon_bitfield_sectorIndex            = ((1 <<  8) - 1) << 24; //indoor only
+const int zCPolygon_bitfield1_sectorIndex           = ((1 <<  8) - 1) <<  0; //continued
+/* sectorIndex is split between bitfield[0] and bitfield[1]. Access like so:
+    ((bitfield[0] & zCPolygon_bitfield_sectorIndex) << 8) + (bitfield[1] & zCPolygon_bitfield1_sectorIndex)
+*/
+
+class zCVertFeature {
+    var int vertNormal[3];    //zPOINT3
+    var int lightStat;        //zCOLOR
+    var int lightDyn;         //zCOLOR
+    var int texu;             //zVALUE
+    var int texv;             //zVALUE
+    var int _empty;           //zVALUE //Padding?
+};
+
+class zCPolygon
+{
+/*0x0000*/    var int vertex;                 //zCVertex** //array
+/*0x0004*/    var int lastTimeDrawn;          //int
+
+              //zTPlane               polyPlane;
+/*0x0008*/        var int polyPlane_distance;     //zREAL
+/*0x000C*/        var int polyPlane_normal[3];    //zVEC3
+
+/*0x0018*/    var int material;               //zCMaterial*
+/*0x001C*/    var int lightmap;               //zCLightMap*
+
+/*0x0020*/    var int clipVert;               //zCVertex      **
+/*0x0024*/    var int clipFeat;               //zCVertFeature **
+/*0x0028*/    var int numClipVert;            //int
+
+/*0x002C*/    var int feature;                //zCVertFeature ** //array
+/*0x0030*/    var int bitfield[1];
+};
+
+class zCMaterial {
+    //zCObject {
+      var int    _vtbl;
+      var int    _zCObject_refCtr;
+      var int    _zCObject_hashIndex;
+      var int    _zCObject_hashNext;
+      var string _zCObject_objectName;
+
+    //zCArray<zCPolygon*>       polyList;
+        var int polyList_array;         //zCPolygon**
+        var int polyList_numAlloc;      //int
+        var int polyList_numInArray;    //int
+
+    var int polyListTimeStamp;          //zDWORD
+    var int texture;                    //zCTexture*
+    var int color;                      //zCOLOR
+    var int smoothAngle;                //zREAL
+    var int matGroup;                   //zTMat_Group
+    var int bspSectorFront;             //zCBspSector*   //outdoor
+    var int bspSectorBack;              //zCBspSector*   //outdoor
+    var int texAniCtrl;                 //zCTexAniCtrl
+    var int detailObjectVisualName;     //zSTRING*
+
+    var int kambient;                        //zREAL
+    var int kdiffuse;                        //zREAL
+
+    var int bitfield[6]; //???
+
+    /*
+        zUINT8               smooth                 : 1;
+        zUINT8               dontUseLightmaps       : 1;
+        zUINT8               texAniMap              : 1;
+        zUINT8               lodDontCollapse        : 1;
+        zUINT8               noCollDet              : 1;
+        zUINT8               polyListNeedsSort      : 1;
+        zUINT8               matUsage               : 8;
+        zUINT8               libFlag                : 8;
+        zTRnd_AlphaBlendFunc rndAlphaBlendFunc      : 8;
+    */
+
+    var int detailTexture;                   //zCTexture*
+    var int detailTextureScale;              //zREAL
+    var int texAniMapDelta[2];               //zPOINT2
+
+    var int default_mapping[2];              //zPOINT2
+    var int texScale[2];                     //zPOINT2
+};
+
+class zTPortalInfo {
+    var int visible;        //zBYTE
+    var int alpha;          //zBYTE
+};
+
+class zCBspSector {
+    var string sectorName;             //zSTRING
+
+    //zCArray<zCBspBase*>               sectorNodes;
+        var int sectorNodes_array;        //zCBspBase**
+        var int sectorNodes_numAlloc;    //int
+        var int sectorNodes_numInArray;  //int
+
+    var int sectorIndex;                //zDWORD
+
+    //zCArray<zCPolygon*>               sectorPortals;
+        var int sectorPortals_array;        //zCPolygon**
+        var int sectorPortals_numAlloc;    //int
+        var int sectorPortals_numInArray;  //int
+
+    //zCArray<zTPortalInfo>         sectorPortalInfo;
+        var int sectorPortalInfo_array;      //zTPortalInfo*
+        var int sectorPortalInfo_numAlloc;  //int
+        var int sectorPortalInfo_numInArray;//int
+
+    var int activated;          //zTFrameCtr
+    var int rendered;           //zTFrameCtr
+    //zTBBox2D   activePortal;
+        var int mins[2];                //zVEC2
+        var int maxs[2];                //zVEC2
+    var int sectorCenter[3];    //zVEC3
+    var int hasBigNoFade;       //zBOOL8
+};
+
+//--------------------------------------
+// Boundingbox
+//--------------------------------------
+
+class zTBBox3D {
+    var int mins[3]; //zPOINT3
+    var int maxs[3]; //zPOINT3
+};
+
+//--------------------------------------
+// Portalzeug
+//--------------------------------------
+
+class oCPortalRoom {
+    var string portalName;    //zSTRING
+    var string ownerNpc;      //zSTRING
+    var int ownerGuild;    //int
+};
+
+class oCPortalRoomManager {
+    var int oldPlayerPortal;    //zSTRING*
+    var int curPlayerPortal;    //zSTRING*
+    var int oldPlayerRoom;      //oCPortalRoom*
+    var int curPlayerRoom;      //oCPortalRoom*
+
+    //zCArraySort <oCPortalRoom*> portals;
+        var int portals_array;      //oCPortalRoom**
+        var int portals_numAlloc;   //int
+        var int portals_numInArray; //int
+        var int portals_compare;    //int (*Compare)(const oCPortalRoom* ele1,const oCPortalRoom* ele2);
+};
+
 //--------------------------------------
 // Timer (technisch und spieltechnisch)
 //--------------------------------------
@@ -97,6 +276,9 @@ class zCTimer {
     var int totalTime;           //zDWORD [msec]
     var int minFrameTime;        //zDWORD       //antifreeze. Sonst wird die Framezeit auf 0 gerundet und nichts bewegt sich
 };
+
+const int oCWorldTimer_TicksPerHour       = 250000;
+const int oCWorldTimer_TicksPerMin_approx = 4167; //< 1 sec / Tag daneben
 
 class oCWorldTimer {
     //250000 Ticks pro Stunde
@@ -117,15 +299,13 @@ class oCWorldTimer {
 
  * Eingeführt sind sie in Ikarus_Const.d */
 
-class oCSpawnManager
-{
-    /*
-    typedef struct oSSpawnNode{
-        oCNpc*      npc;
-        zVEC3       spawnPos;
-        zREAL       timer;
-    } oTSpawnNode; */
+class oTSpawnNode {
+    var int npc;         //oCNpc *
+    var int spawnPos[3]; //zVEC3
+    var int timer;       //zREAL
+};
 
+class oCSpawnManager {
     //zCArray<oTSpawnNode*> spawnList;
         var int spawnList_array;        //oTSpawnNode**
         var int spawnList_numAlloc;     //int
@@ -134,29 +314,6 @@ class oCSpawnManager
     var int spawningEnabled;        //zBOOL
     var int camPos[3];              //zVEC3
     var int insertTime;             //zREAL //Verzögerungszeit des Spawnmanagers (Performancegründe)
-};
-
-//--------------------------------------
-// Portalzeug
-//--------------------------------------
-
-class oCPortalRoom {
-    var string portalName;    //zSTRING 
-    var string ownerNpc;      //zSTRING 
-    var int ownerGuild;    //int           
-};
-
-class oCPortalRoomManager {
-    var int oldPlayerPortal;    //zSTRING*      
-    var int curPlayerPortal;    //zSTRING*      
-    var int oldPlayerRoom;      //oCPortalRoom*
-    var int curPlayerRoom;      //oCPortalRoom*
-
-    //zCArraySort <oCPortalRoom*> portals;
-        var int portals_array;      //oCPortalRoom**
-        var int portals_numAlloc;   //int
-        var int portals_numInArray; //int
-        var int portals_compare;    //int (*Compare)(const oCPortalRoom* ele1,const oCPortalRoom* ele2);
 };
 
 //--------------------------------------
@@ -329,6 +486,77 @@ class zString {
 };
 
 const int sizeof_zString = 20;
+
+//--------------------------------------
+// zCClassDef
+//--------------------------------------
+
+/* Für jede (von zCObject abgeleitete) Klasse gibt es
+ * ein "Verwaltungsobjekt" vom Typ zCClassDef.
+ * Dieses kapselt einige nützliche Informationen zu der
+ * Gesamtheit der Objekte dieser Klasse.
+ * Mit MEM_GetClassDef (var int objPtr) kann das
+ * zu einem Objekt gehörige zCClassDef Objekt bestimmt
+ * werden. Das heißt für ein übergebenes Vob, bekäme
+ * man zCClassDef für die Klasse zCVob.
+ */
+
+const int zCClassDef_bitfield_archiveVersion    = ((1 << 16) - 1) <<  0; //zWORD
+const int zCClassDef_bitfield_archiveVersionSum = ((1 << 16) - 1) << 16; //zWORD
+
+class zCClassDef {
+    var string className;            //zSTRING
+    var string baseClassName;        //zSTRING
+    var string scriptClassName;      //zSTRING
+    var int baseClassDef;            //zCClassDef* //davon abgeleitet
+
+    var int createNewInstance;       //zCObject* ( *) (void) //Pointer auf klassenspezifische Funktion
+    var int createNewInstanceBackup; //zCObject* ( *) (void) //Pointer auf klassenspezifische Funktion
+
+    /*
+    enum zTClassFlags {
+        zCLASS_FLAG_SHARED_OBJECTS      = 1<<0, //Mehrfach benutzt Objekte (wie Visuals zum Beispiel)
+        zCLASS_FLAG_TRANSIENT           = 1<<1, //Flüchtig, soll nicht gespeichert werden.
+        zCLASS_FLAG_RESOURCE            = 1<<2, //keine Ahnung / vermutlich irrelevant
+    };*/
+
+    var int classFlags;              //zDWORD //siehe enum
+    var int classSize;               //zDWORD //Größe in Bytes
+
+    var int numLivingObjects;        //Anzahl Objekte von dieser Klasse
+    var int numCtorCalled;           //Konstruktor wurde sooft aufgerufen
+
+    var int hashTable;               //zCObject** //Hashtabelle der Größe 1024. Objekte sind mit zCObject.hashNext verknüpft, falls mehrere auf den selben Wert hashen.
+    //zCArray<zCObject*> objectList;    //alle benannten (!) Objekte von genau (!) dieser Klasse (!) //Ausrufezeichenanmerkungen: 1.) unbenannte sind nicht drin 2.) Objekte von Unterklassen sind nicht drin 3.) diese Eigenschaft kann sehr nützlich sein.
+        var int objectList_array;       //zCObject**
+        var int objectList_numAlloc;    //int
+        var int objectList_numInArray;  //int
+
+    var int bitfield;
+};
+
+//--------------------------------------
+// oCLogTopic
+//--------------------------------------
+
+class oCLogTopic {
+    var string          m_strDescription;
+    var int             m_enuSection    ; //LOG_MISSION / LOG_NOTE
+    var int             m_enuStatus     ; //LOG_RUNNING /
+
+    //zCList<zString> m_lstEntries;
+        var int m_lstEntries_data; //zString*
+        var int m_lstEntries_next; //zCList<zString>*
+};
+
+/* oCLogManager == zCList<oCLogTopic> */
+
+class oCLogManager {
+    var int data; //oCLogTopic*
+    var int next; //zCList<oCLogTopic>*
+};
+
+const int oCLogManager_Ptr = 10328172; //0x9D986C
 
 //--------------------------------------
 // zERROR
