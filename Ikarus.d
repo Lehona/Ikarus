@@ -2726,6 +2726,23 @@ func string STR_Upper(var string str) {
     return str;
 };
 
+func string STR_Lower(var string str) {
+    const int zSTRING__Lower_G1 = 4608640; //0x465280
+    const int zSTRING__Lower_G2 = 4631024; //0x46A9F0
+
+    var int ptr; ptr = _@s(str);
+
+    const int call = 0;
+    if (CALL_Begin(call)) {
+        CALL_PutRetValTo(0);
+        CALL__thiscall(_@(ptr), MEMINT_SwitchG1G2(zSTRING__Lower_G1, zSTRING__Lower_G2));
+
+        call = CALL_End();
+    };
+
+    return str;
+};
+
 //######################################################
 //
 //  More elaborate zCParser related functions
@@ -4472,11 +4489,14 @@ func void MEM_ApplyGothOpt() {
 
 func int MEMINT_HexCharToInt(var int c) {
     const int ASCII_a = 97;
+    const int ASCII_A_ = 65;
     const int ASCII_0 = 48;
     if (c >= ASCII_0 && c < ASCII_0 + 10) {
         return c - ASCII_0;
     } else if (c >= ASCII_a && c < ASCII_a + 6) {
         return 10 + c - ASCII_a;
+    } else if (c >= ASCII_A_ && c < ASCII_A_ + 6) {
+        return 10 + c - ASCII_A_;
     } else {
         MEM_Error(ConcatStrings("Invalid Hex Char: ", IntToString(c)));
         return 0;
@@ -4523,13 +4543,24 @@ func int MEM_GetSecondaryKey(var string name) {
 
 func string MEMINT_ByteToKeyHex(var int byte) {
     const int ASCII_0 = 48;
+    const int ASCII_A = 65;
     byte = byte & 255;
     
+    // Fix ASCII characters (A to F)
+    var int c1; c1 = (byte >> 4);
+    if (c1 >= 10) {
+        c1 += ASCII_A-ASCII_0-10;
+    };
+    var int c2; c2 = (byte & 15);
+    if (c2 >= 10) {
+        c2 += ASCII_A-ASCII_0-10;
+    };
+
     const int mem = 0;
     if (!mem) { mem = MEM_Alloc(3); };
     
-    MEM_WriteByte(mem    , (byte >>  4) + ASCII_0);
-    MEM_WriteByte(mem + 1, (byte &  15) + ASCII_0);
+    MEM_WriteByte(mem    , c1 + ASCII_0);
+    MEM_WriteByte(mem + 1, c2 + ASCII_0);
     return STR_FromChar(mem);
 };
 
