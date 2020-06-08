@@ -319,9 +319,9 @@ func void MEMINT_GetMemHelper() {
 //GOTHIC_BASE_VERSION == 1 ? g1Val : g2Val
 func int MEMINT_SwitchG1G2(var int g1Val, var int g2Val) {
     if (GOTHIC_BASE_VERSION == 1) {
-        return g1Val;
+        return +g1Val;
     } else {
-        return g2Val;
+        return +g2Val;
     };
 };
 
