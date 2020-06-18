@@ -146,7 +146,7 @@
 //   that may have old versions, use this:
 //----------------------------------------------
 
-const int IKARUS_VERSION = 10201; //2 digits for Major and Minor Revision number.
+const int IKARUS_VERSION = 10202; //2 digits for Major and Minor Revision number.
 
 /* returns 1 if the version of Ikarus is the specified version or newer */
 func int MEM_CheckVersion(var int base, var int major, var int minor) {
