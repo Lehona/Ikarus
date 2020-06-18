@@ -3,7 +3,7 @@
 //  Kern des Skriptpakets "Ikarus"
 //      Autor      : Sektenspinner
 //      Co-Autor   : Gottfried, mud-freak, Neconspictor
-//	    Version    : 1.2.1
+//	    Version    : 1.2.2
 //
 //######################################################
 
