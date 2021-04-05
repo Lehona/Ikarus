@@ -4726,7 +4726,11 @@ func int MEM_BenchmarkPC_N(var func f, var int n) {
 //************************************************
 
 func void MEMINT_SendToSpy_Implementation(var int errorType, var string text) {
-    text = ConcatStrings("Q: ", text); //! = Ikarus
+    if (errorType == zERR_TYPE_FATAL) {
+        text = ConcatStrings("  ", text); // No author prefix required
+    } else {
+        text = ConcatStrings("Q: ", text); //! = Ikarus
+    };
     
     const int zerr_G1 = 8821208; //0x8699D8
     const int zerr_G2 = 9231568; //0x8CDCD0
