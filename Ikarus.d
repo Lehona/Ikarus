@@ -2954,9 +2954,11 @@ func int MEMINT_BuildFuncStartsArray() {
         var zCPar_Symbol symb;
         symb = _^(MEM_ReadIntArray(MEM_Parser.symtab_table_array, i));
        
+        var int type; type = symb.bitfield & zCPar_Symbol_bitfield_type;
         if  (symb.bitfield & zPAR_FLAG_CONST)
         && !(symb.bitfield & zPAR_FLAG_EXTERNAL)
-        && ((symb.bitfield & zCPar_Symbol_bitfield_type) == zPAR_TYPE_FUNC) {
+        && ((type == zPAR_TYPE_FUNC) || (type == zPAR_TYPE_INSTANCE))
+        ||  (type == zPAR_TYPE_PROTOTYPE) { // Not constant
             /* check integrity */
             if (wasSorted && lastOffset > symb.content) {
                 wasSorted = 0;
