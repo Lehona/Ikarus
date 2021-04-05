@@ -296,12 +296,12 @@ const string PARSER_TOKEN_NAMES[246] = {
     "[INVALID_TOKEN]       ",
     "[INVALID_TOKEN]       ",
     "[INVALID_TOKEN]       ",
-    "zPAR_OP_UNARY         ",
-    "zPAR_OP_UN_PLUS       ",
+    "zPAR_OP_UN_PLUS       ", // zPAR_OP_UNARY
     "zPAR_OP_UN_MINUS      ",
     "zPAR_OP_UN_NOT        ",
-    "zPAR_OP_UN_NEG        ",
-    "zPAR_OP_MAX           ",
+    "zPAR_OP_UN_NEG        ", // zPAR_OP_MAX
+    "[INVALID_TOKEN]       ",
+    "[INVALID_TOKEN]       ",
     "[INVALID_TOKEN]       ",
     "[INVALID_TOKEN]       ",
     "[INVALID_TOKEN]       ",
