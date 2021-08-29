@@ -3212,7 +3212,7 @@ func void MEMINT_TokenizeFunction(var int funcID, var int tokenArray, var int pa
     
     if (tok == zPAR_TOK_RET) {
         if (MEM_GetFuncIDByOffset(pos - currParserStackAddress) != funcID)
-        || (pos >= MEM_Parser.stack_stacklast) {
+        || (pos - currParserStackAddress >= MEM_Parser.stack_stacksize) {
             /* mark end of function */
             MEM_ArrayInsert(posArr, pos);
             MEM_ArrayInsert(tokenArray, -1);
