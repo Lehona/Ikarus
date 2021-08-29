@@ -4722,9 +4722,15 @@ func void MEMINT_SendToSpy_Implementation(var int errorType, var string text) {
         if (GOTHIC_BASE_VERSION == 1) {
             /* There is a warning "lost focus",
              * that will be printed constantly, unless
-             * I reduce its priority here */
-            MemoryProtectionOverride(/*0x4F55C2*/ 5199298, 1);
-            MEM_WriteByte(5199298, 1);
+             * I reduce its priority here.
+             * To avoid a crash, remove it entirely */
+            const int WndProc_FocusWarn = 5199312; //0x4F55D0
+            MemoryProtectionOverride(WndProc_FocusWarn, 5);
+            MEM_WriteByte(WndProc_FocusWarn+0, /*83*/ 131); // esp
+            MEM_WriteByte(WndProc_FocusWarn+1, /*C4*/ 196); // add
+            MEM_WriteByte(WndProc_FocusWarn+2, 8*4);        // 0x20
+            MEM_WriteByte(WndProc_FocusWarn+3, ASMINT_OP_nop);
+            MEM_WriteByte(WndProc_FocusWarn+4, ASMINT_OP_nop);
         };
     
         zerr.ack_type = zERR_TYPE_WARN;
