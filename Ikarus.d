@@ -311,7 +311,7 @@ func void MEMINT_GetMemHelper() {
         var C_NPC selfBak;
         selfBak = Hlp_GetNpc (self);
         Wld_InsertNpc (MEM_HELPER_INST, MEM_FARFARAWAY);
-        MEM_Helper = Hlp_GetNpc (self);
+        MEM_Helper = Hlp_GetNpc (MEM_HELPER_INST);
         self = Hlp_GetNpc (selfBak);
     };
 };
