@@ -110,6 +110,22 @@ const int oCMobLadder_vtbl      = 8638252;
 const int oCMobSwitch_vtbl      = 8636988;
 const int oCMobBed_vtbl         = 8636692;
 
+// ClassDef addresses
+const int oCMobFire_classDef       = 11212440; //0xAB1698
+const int zCMover_classDef         = 10107488; //0x9A3A60
+const int oCMOB_classDef           = 11213328; //0xAB1A10
+const int oCMobInter_classDef      = 11213216; //0xAB19A0
+const int oCMobLockable_classDef   = 11212184; //0xAB1598
+const int oCMobContainer_classDef  = 11212976; //0xAB18B0
+const int oCMobDoor_classDef       = 11212056; //0xAB1518
+const int oCMobBed_classDef        = 11211936; //0xAB14A0
+const int oCMobSwitch_classDef     = 11212736; //0xAB17C0
+const int oCMobWheel_classDef      = 11211824; //0xAB1430
+const int oCMobLadder_classDef     = 11212864; //0xAB1840
+const int oCNpc_classDef           = 11214368; //0xAB1E20
+const int oCItem_classDef          = 11211112; //0xAB1168
+const int zCVobLight_classDef      = 10106896; //0x9A3810
+
 //--------------------------------------
 // Tasten
 //--------------------------------------

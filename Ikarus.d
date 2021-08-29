@@ -3824,118 +3824,12 @@ func void MEM_InitGlobalInst() {
 };
 
 //************************************************
-// Validity checks
-//************************************************
-
-func int Hlp_Is_oCMobFire (var int ptr) {
-    if (!ptr) { return 0; };
-    return (MEM_ReadInt (ptr) == oCMobFire_vtbl);
-};
-
-func int Hlp_Is_zCMover(var int ptr) {
-    if (!ptr) { return 0; };
-    return (MEM_ReadInt (ptr) == zCMover_vtbl);
-};
-
-func int Hlp_Is_oCMob(var int ptr) {
-    if (!ptr) { return 0; };
-
-    var int vtbl;
-    vtbl = MEM_ReadInt (ptr);
-
-    /* Schreibweise so bescheuert, weil Gothic Sourcer bei || meckert. */
-    return (vtbl == oCMob_vtbl)
-        |  (vtbl == oCMobInter_vtbl)
-        |  (vtbl == oCMobSwitch_vtbl)
-        |  (vtbl == oCMobWheel_vtbl)
-        |  (vtbl == oCMobContainer_vtbl)
-        |  (vtbl == oCMobLockable_vtbl)
-        |  (vtbl == oCMobLadder_vtbl)
-        |  (vtbl == oCMobFire_vtbl)
-        |  (vtbl == oCMobBed_vtbl)
-        |  (vtbl == oCMobDoor_vtbl);
-};
-
-func int Hlp_Is_oCMobInter(var int ptr) {
-    if (!ptr) { return 0; };
-
-    var int vtbl;
-    vtbl = MEM_ReadInt (ptr);
-
-    return (vtbl == oCMobInter_vtbl)
-         | (vtbl == oCMobSwitch_vtbl)
-         | (vtbl == oCMobWheel_vtbl)
-         | (vtbl == oCMobContainer_vtbl)
-         | (vtbl == oCMobLockable_vtbl)
-         | (vtbl == oCMobLadder_vtbl)
-         | (vtbl == oCMobFire_vtbl)
-         | (vtbl == oCMobBed_vtbl)
-         | (vtbl == oCMobDoor_vtbl);
-};
-
-func int Hlp_Is_oCMobLockable(var int ptr) {
-    if (!ptr) { return 0; };
-
-    var int vtbl;
-    vtbl = MEM_ReadInt (ptr);
-
-    return (vtbl == oCMobContainer_vtbl)
-         | (vtbl == oCMobLockable_vtbl)
-         | (vtbl == oCMobDoor_vtbl);
-};
-
-func int Hlp_Is_oCMobContainer(var int ptr) {
-    if (!ptr) { return 0; };
-    return (MEM_ReadInt (ptr) == oCMobContainer_vtbl);
-};
-
-func int Hlp_Is_oCMobDoor(var int ptr) {
-    if (!ptr) { return 0; };
-    return (MEM_ReadInt (ptr) == oCMobDoor_vtbl);
-};
-
-func int Hlp_Is_oCMobBed(var int ptr) {
-    if (!ptr) { return 0; };
-    return (MEM_ReadInt (ptr) == oCMobBed_vtbl);
-};
-
-func int Hlp_Is_oCMobSwitch(var int ptr) {
-    if (!ptr) { return 0; };
-    return (MEM_ReadInt (ptr) == oCMobSwitch_vtbl);
-};
-
-func int Hlp_Is_oCMobWheel(var int ptr) {
-    if (!ptr) { return 0; };
-    return (MEM_ReadInt (ptr) == oCMobWheel_vtbl);
-};
-
-func int Hlp_Is_oCMobLadder(var int ptr) {
-    if (!ptr) { return 0; };
-    return (MEM_ReadInt (ptr) == oCMobLadder_vtbl);
-};
-
-func int Hlp_Is_oCNpc (var int ptr) {
-    if (!ptr) { return 0; };
-    return (MEM_ReadInt (ptr) == oCNpc_vtbl);
-};
-
-func int Hlp_Is_oCItem (var int ptr) {
-    if (!ptr) { return 0; };
-    return (MEM_ReadInt (ptr) == oCItem_vtbl);
-};
-
-func int Hlp_Is_zCVobLight (var int ptr) {
-    if (!ptr) { return 0; };
-    return (MEM_ReadInt (ptr) == zCVobLight_vtbl);
-};
-
-//************************************************
 //   Find zCClassDef
 //************************************************
 
 func int MEM_GetClassDef (var int objPtr) {
     if (!objPtr) {
-        MEM_Error ("MEMINT_GetClassDef: ObjPtr == 0.");
+        MEM_Error ("MEM_GetClassDef: ObjPtr == 0");
         return 0;
     };
     
@@ -3945,8 +3839,18 @@ func int MEM_GetClassDef (var int objPtr) {
     //obj._vtbl[0] contains the address of a virtual function that returns
     //the classDef of the class of the object.
     //This function contains of a single "mov" command (1 byte) that is followed by the address that is of interest here.
-    
-    return MEM_ReadInt (1 + MEM_ReadInt (MEM_ReadInt (objPtr)));
+
+    //return MEM_ReadInt (1 + MEM_ReadInt (MEM_ReadInt (objPtr)));
+    var int addr; addr = MEM_ReadInt(objPtr);
+    if (addr) {
+        addr = MEM_ReadInt(addr);
+        if (addr) {
+            return MEM_ReadInt(1 + addr);
+        };
+    };
+
+    MEM_Error("MEM_GetClassDef: ObjPtr not a valid object");
+    return 0;
 };
 
 func string MEM_GetClassName (var int objPtr) {
@@ -3957,6 +3861,82 @@ func string MEM_GetClassName (var int objPtr) {
         return MEM_ReadString (classDef); //gleich die erste Eigenschaft / first property of zCClassDef.
     };
     return "";
+};
+
+func int MEM_CheckInheritance(var int objPtr, var int classDef) {
+    if (!objPtr) || (!classDef) {
+        return 0;
+    };
+
+    var int curClassDef; curClassDef = MEM_GetClassDef(objPtr);
+
+    // Iterate over base classes
+    while(curClassDef && curClassDef != classDef);
+        var zCClassDef cD; cD = _^(curClassDef);
+        curClassDef = cD.baseClassDef;
+    end;
+
+    return (curClassDef == classDef);
+};
+
+//************************************************
+// Validity checks
+//************************************************
+
+func int Hlp_Is_oCMobFire(var int ptr) {
+    return MEM_CheckInheritance(ptr, oCMobFire_classDef);
+};
+
+func int Hlp_Is_zCMover(var int ptr) {
+    return MEM_CheckInheritance(ptr, zCMover_classDef);
+};
+
+func int Hlp_Is_oCMob(var int ptr) {
+    return MEM_CheckInheritance(ptr, oCMOB_classDef);
+};
+
+func int Hlp_Is_oCMobInter(var int ptr) {
+    return MEM_CheckInheritance(ptr, oCMobInter_classDef);
+};
+
+func int Hlp_Is_oCMobLockable(var int ptr) {
+    return MEM_CheckInheritance(ptr, oCMobLockable_classDef);
+};
+
+func int Hlp_Is_oCMobContainer(var int ptr) {
+    return MEM_CheckInheritance(ptr, oCMobContainer_classDef);
+};
+
+func int Hlp_Is_oCMobDoor(var int ptr) {
+    return MEM_CheckInheritance(ptr, oCMobDoor_classDef);
+};
+
+func int Hlp_Is_oCMobBed(var int ptr) {
+    return MEM_CheckInheritance(ptr, oCMobBed_classDef);
+};
+
+func int Hlp_Is_oCMobSwitch(var int ptr) {
+    return MEM_CheckInheritance(ptr, oCMobSwitch_classDef);
+};
+
+func int Hlp_Is_oCMobWheel(var int ptr) {
+    return MEM_CheckInheritance(ptr, oCMobWheel_classDef);
+};
+
+func int Hlp_Is_oCMobLadder(var int ptr) {
+    return MEM_CheckInheritance(ptr, oCMobLadder_classDef);
+};
+
+func int Hlp_Is_oCNpc(var int ptr) {
+    return MEM_CheckInheritance(ptr, oCNpc_classDef);
+};
+
+func int Hlp_Is_oCItem(var int ptr) {
+    return MEM_CheckInheritance(ptr, oCItem_classDef);
+};
+
+func int Hlp_Is_zCVobLight(var int ptr) {
+    return MEM_CheckInheritance(ptr, zCVobLight_classDef);
 };
 
 //************************************************
