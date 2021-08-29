@@ -4139,7 +4139,6 @@ func void MEM_TriggerVob (var int vobPtr) {
     const int zCEventManager_OnTrigger_G1 = 7202656; //0x6DE760
     const int zCEventManager_OnTrigger_G2 = 7895536; //0x7879F0
     
-    var zCVob vob; vob = _^(vobPtr);
     var int eventMan; eventMan = MEMINT_VobGetEM(vobPtr);
     
     const int call = 0;
@@ -4163,7 +4162,6 @@ func void MEM_UntriggerVob (var int vobPtr) {
     const int zCEventManager_OnUnTrigger_G1 = 7202848; //6DE820
     const int zCEventManager_OnUnTrigger_G2 = 7895728; //787AB0
     
-    var zCVob vob; vob = _^(vobPtr);
     var int eventMan; eventMan = MEMINT_VobGetEM(vobPtr);
     
     const int call = 0;
