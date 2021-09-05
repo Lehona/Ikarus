@@ -1068,6 +1068,7 @@ func void MEM_Free (var int ptr) {
 //#################################################
 
 /* 1 Byte */
+const int ASMINT_OP_movImToEAX   = 184;  //0xB8
 const int ASMINT_OP_movImToECX   = 185;  //0xB9
 const int ASMINT_OP_movImToEDX   = 186;  //0xBA
 const int ASMINT_OP_pushIm       = 104;  //0x68
@@ -3845,7 +3846,14 @@ func int MEM_GetClassDef (var int objPtr) {
     if (addr) {
         addr = MEM_ReadInt(addr);
         if (addr) {
-            return MEM_ReadInt(1 + addr);
+            // The following (see explanation above) holds for all original ClassDef functions
+            if (MEM_ReadByte(addr) == ASMINT_OP_movImToEAX) && (MEM_ReadByte(5 + addr) == ASMINT_OP_retn) {
+                return MEM_ReadInt(1 + addr);
+            };
+
+            // For newly added classes, however, the function may look different
+            CALL__thiscall(_@(objPtr), addr);
+            return CALL_RetValAsInt();
         };
     };
 
