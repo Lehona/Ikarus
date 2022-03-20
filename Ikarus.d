@@ -1813,8 +1813,16 @@ func int MEM_CompareBytes(var int ptr1, var int ptr2, var int byteCount) {
         MEM_StackPos.position = loopPos;
     };
     
-    var int mask; mask = (1 << byteCount * 8) - 1;
-    return (MEM_ReadInt(ptr1) & mask) == (MEM_ReadInt(ptr2) & mask);
+    if (byteCount > 0) {
+        if (MEM_ReadByte(ptr1) != MEM_ReadByte(ptr2)) {
+            return 0;
+        };
+        ptr1 += 1; ptr2 += 1;
+        byteCount -= 1;
+        MEM_StackPos.position = loopPos;
+    };
+
+    return 1;
 };
 
 func int MEM_CompareWords(var int ptr0, var int ptr1, var int wordCount) {
