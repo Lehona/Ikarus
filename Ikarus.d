@@ -1076,6 +1076,9 @@ const int ASMINT_OP_call         = 232;  //0xE8
 const int ASMINT_OP_retn         = 195;  //0xC3
 const int ASMINT_OP_nop          = 144;  //0x90
 const int ASMINT_OP_jmp          = 233;  //0xE9
+const int ASMINT_OP_cld          = 252;  //0xFC
+const int ASMINT_OP_repz         = 243;  //0xF3
+const int ASMINT_OP_cmpsb        = 166;  //0xA6
 const int ASMINT_OP_PushEAX      =  80;  //0x50
 const int ASMINT_OP_pushECX      =  81;  //0x51
 const int ASMINT_OP_popEAX       =  88;  //0x58
@@ -1094,6 +1097,8 @@ const int ASMINT_OP_addImToESP      = 50307; //0xC483
 const int ASMINT_OP_movMemToECX     =  3467; //0x0D8B
 const int ASMINT_OP_movMemToCL      =  3466; //0x0D8A
 const int ASMINT_OP_movMemToEDX     =  5515; //0x158B
+const int ASMINT_OP_movMemToEDI     = 15755; //0x3D8B
+const int ASMINT_OP_movMemToESI     = 13707; //0x358B
 const int ASMINT_OP_movECXtoEAX     = 49547; //0xC18B  aus LeGo geklaut
 const int ASMINT_OP_movESPtoEAX     = 50315; //0xC48B  aus LeGo geklaut
 const int ASMINT_OP_movEAXtoECX     = 49545; //0xC189  aus LeGo geklaut
@@ -1101,6 +1106,9 @@ const int ASMINT_OP_movEBXtoEAX     = 55433; //0xD889  aus LeGo geklaut
 const int ASMINT_OP_movEBPtoEAX     = 50571; //0xC58B  aus LeGo geklaut
 const int ASMINT_OP_movEDItoEAX     = 51083; //0xC78B  aus LeGo geklaut
 const int ASMINT_OP_addImToEAX      = 49283; //0xC083  aus LeGo geklaut
+
+/* 3 Bytes */
+const int ASMINT_OP_setzMem         = 365583; //0x05940F
 
 /* Tuning:
    If not specified differently,
@@ -1783,8 +1791,7 @@ func int MEM_Realloc (var int ptr, var int oldsize, var int newsize) {
 //   Compare Memory
 //************************************************
 
-/* couldnt find memcmp at first glance...
- * left it as it is. */
+/* couldnt find memcmp at first glance... */
  
 func int MEM_CompareBytes(var int ptr1, var int ptr2, var int byteCount) {
     if (byteCount < 0) {
@@ -1803,18 +1810,22 @@ func int MEM_CompareBytes(var int ptr1, var int ptr2, var int byteCount) {
         return 0;
     };
 
-    var int loopPos; loopPos = MEM_StackPos.position;
-    if (byteCount >= 4) {
-        if (MEM_ReadInt(ptr1) != MEM_ReadInt(ptr2)) {
-            return 0;
-        };
-        ptr1 += 4; ptr2 += 4;
-        byteCount -= 4;
-        MEM_StackPos.position = loopPos;
+    const int call = 0;
+    if (CALL_Begin(call)) {
+        ASM_Open(31);
+        ASM_1(ASMINT_OP_pusha);
+        ASM_2(ASMINT_OP_movMemToESI); ASM_4(_@(ptr1));
+        ASM_2(ASMINT_OP_movMemToEDI); ASM_4(_@(ptr2));
+        ASM_2(ASMINT_OP_movMemToECX); ASM_4(_@(byteCount));
+        ASM_1(ASMINT_OP_cld);
+        ASM_1(ASMINT_OP_repz);        ASM_1(ASMINT_OP_cmpsb);
+        ASM_3(ASMINT_OP_setzMem);     ASM_4(_@(ret));
+        ASM_1(ASMINT_OP_popa);
+        call = CALL_End();
     };
-    
-    var int mask; mask = (1 << byteCount * 8) - 1;
-    return (MEM_ReadInt(ptr1) & mask) == (MEM_ReadInt(ptr2) & mask);
+
+    var int ret;
+    return +ret;
 };
 
 func int MEM_CompareWords(var int ptr0, var int ptr1, var int wordCount) {
@@ -3852,7 +3863,7 @@ func int MEM_GetClassDef (var int objPtr) {
             };
 
             // For newly added classes, however, the function may look different
-            CALL__thiscall(_@(objPtr), addr);
+            CALL__thiscall(objPtr, addr);
             return CALL_RetValAsInt();
         };
     };
