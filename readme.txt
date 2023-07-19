@@ -1,4 +1,4 @@
-Abhängig von der Gothic Version (1 oder 2) ist die G1 oder G2 Versionen
+Abhängig von der Gothic Version (1, 1.12f oder 2) ist die G1, G112 oder G2 Versionen
 vom EngineClasses Ordner sowie der Ikarus_Const.d zu wählen.
 
 Zunächst ist die Datei Ikarus_Const_G[x] zu parsen,
@@ -17,5 +17,5 @@ Empfehlenswerte aber nicht notwendige Ergänzung zu Ikarus dar.
 Die Benutzung ist in der Datei selbst erklärt.
 Die Datei muss nach Ikarus.d geparst werden.
 
-Um Ikarus zu nutzen, braucht lediglich Ikarus_G1.src, bzw. Ikarus_G2.src
-in die Gothic.src eingetragen zu werden.
+Um Ikarus zu nutzen, braucht lediglich Ikarus_G1.src, bzw. Ikarus_G112.src oder
+Ikarus_G2.src in die Gothic.src eingetragen zu werden.

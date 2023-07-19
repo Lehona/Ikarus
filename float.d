@@ -206,6 +206,7 @@ const int FLTINT_mul_code  [3] = { -639268523, 1306004549, 12830984 };
 const int FLTINT_div_code  [3] = { -639268523, 2111310917, 12830984 };
 const int FLTINT_add_code  [3] = { -639268523, 1171786821, 12830984 };
 const int FLTINT_mk_code   [2] = { -605714091, -1010235323 };
+const int FLTINT_sqrt_code [2] = { 69485785, 12843737 };
 
 /* Helper Function: */
 func int _FLT_Build_Func(var int codePtr, var int param1Ptr, var int param2Ptr, var int retValIsFloat, var int resultPtr) {
@@ -287,13 +288,9 @@ func int sqrf(var int f) {
 };
 
 func int sqrtf(var int f) {
-    const int sqrtf_G1 = 7757593; //0x765F19
-    const int sqrtf_G2 = 8123917; //0x7BF60D
-    
     const int code = 0;
     if (!code) {
-        code = _FLT_Build_Func(MEMINT_SwitchG1G2(sqrtf_G1, sqrtf_G2),
-                               _@(f), 0, 1, _@(result));
+        code = _FLT_Build_Func(_@(FLTINT_sqrt_code), _@(f), 0, 1, _@(result));
     };
     ASM_Run(code);
     var int result;
