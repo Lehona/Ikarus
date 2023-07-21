@@ -320,20 +320,22 @@ func void MEMINT_GetMemHelper() {
 func int MEMINT_SwitchG1G2(var int g1Val, var int g2Val) {
     if (GOTHIC_BASE_VERSION == 1) {
         return +g1Val;
-    } else if (GOTHIC_BASE_VERSION == 112) {
-        MEM_Warn("Invalid use of MEMINT_SwitchG1G2 in this context!");
-        return +g1Val;
-    } else {
-        return +g2Val;
-    };
-};
-func int MEMINT_SwitchG1G112G2(var int g1Val, var int g112Val, var int g2Val) {
-    if (GOTHIC_BASE_VERSION == 1) {
-        return +g1Val;
     } else if (GOTHIC_BASE_VERSION == 2) {
         return +g2Val;
     } else {
+        MEM_Error("Invalid use of MEMINT_SwitchG1G2 in this context! Use MEMINT_SwitchExe instead.");
+        return 0;
+    };
+};
+func int MEMINT_SwitchExe(var int g1Val, var int g112Val, var int g130Val, var int g2Val) {
+    if (GOTHIC_BASE_VERSION == 1) {
+        return +g1Val;
+    } else if (GOTHIC_BASE_VERSION == 112) {
         return +g112Val;
+    } else if (GOTHIC_BASE_VERSION == 130) {
+        return +g130Val;
+    } else {
+        return +g2Val;
     };
 };
 
@@ -1690,6 +1692,7 @@ func void MEM_SetShowDebug (var int on) {
 func void MEM_CopyBytes (var int src, var int dst, var int byteCount) {
     const int memcpy_G1 = 7846464; //0x77BA40
     const int memcpy_G112 = 8124416; //0x7BF800
+    const int memcpy_G130 = 8162912; //0x7C8E60
     const int memcpy_G2 = 8213280; //0x7D5320
     
     const int call = 0;
@@ -1699,7 +1702,7 @@ func void MEM_CopyBytes (var int src, var int dst, var int byteCount) {
         CALL_IntParam(_@(dst));
         
         CALL_PutRetValTo(0);
-        CALL__cdecl(MEMINT_SwitchG1G112G2(memcpy_G1, memcpy_G112, memcpy_G2));
+        CALL__cdecl(MEMINT_SwitchExe(memcpy_G1, memcpy_G112, memcpy_G130, memcpy_G2));
         
         call = CALL_End();
     };
@@ -1721,6 +1724,7 @@ func void MEM_Copy (var int src, var int dst, var int wordcount) {
 func void MEM_SwapBytes(var int src, var int dst, var int byteCount) {
     const int swap_G1 = 7829281; //0x777721
     const int swap_G112 = 8107233; //0x7BB4E1
+    const int swap_G130 = 8146001; //0x7C4C51
     const int swap_G2 = 8196369; //0x7D1111
 
     const int call = 0;
@@ -1730,7 +1734,7 @@ func void MEM_SwapBytes(var int src, var int dst, var int byteCount) {
         CALL_PtrParam(_@(dst));
         
         CALL_PutRetValTo(0);
-        CALL__cdecl(MEMINT_SwitchG1G112G2(swap_G1, swap_G112, swap_G2));
+        CALL__cdecl(MEMINT_SwitchExe(swap_G1, swap_G112, swap_G130, swap_G2));
         call = CALL_End();
     };
 };
@@ -1750,6 +1754,7 @@ func void MEM_SwapWords(var int src, var int dst, var int wordCount) {
 func void MEM_Clear(var int ptr, var int size) {
     const int memset_G1 = 7877040; //0x7831B0
     const int memset_G112 = 8154544; //0x7C6DB0
+    const int memset_G130 = 8193488; //0x7D05D0
     const int memset_G2 = 8243856; //0x7DCA90
     
     var int null;
@@ -1760,7 +1765,7 @@ func void MEM_Clear(var int ptr, var int size) {
         CALL_PtrParam(_@(ptr));
         
         CALL_PutRetValTo(0);
-        CALL__cdecl(MEMINT_SwitchG1G112G2(memset_G1, memset_G112, memset_G2));
+        CALL__cdecl(MEMINT_SwitchExe(memset_G1, memset_G112, memset_G130, memset_G2));
         
         call = CALL_End();
     };
@@ -1783,6 +1788,7 @@ func int MEM_Realloc (var int ptr, var int oldsize, var int newsize) {
     
     const int realloc_G1 = 7712186; //0x75ADBA
     const int realloc_G112 = 7984858; //0x79D6DA
+    const int realloc_G130 = 8028058; //0x7A7F9A
     const int realloc_G2 = 8078522; //0x7B44BA
     
     const int call = 0;
@@ -1791,7 +1797,7 @@ func int MEM_Realloc (var int ptr, var int oldsize, var int newsize) {
         CALL_PtrParam(_@(ptr));
         
         CALL_PutRetValTo(_@(ptr));
-        CALL__cdecl(MEMINT_SwitchG1G112G2(realloc_G1, realloc_G112, realloc_G2));
+        CALL__cdecl(MEMINT_SwitchExe(realloc_G1, realloc_G112, realloc_G130, realloc_G2));
         
         call = CALL_End();
     }; /* ptr is now filled */
@@ -1871,8 +1877,10 @@ func int LoadLibrary (var string lpFileName) {
             WinAPI__LoadLibrary = MEM_ReadInt (8577604); //0x82E244
         } else if (GOTHIC_BASE_VERSION == 1) {
             WinAPI__LoadLibrary = MEM_ReadInt (8192588); //0x7D024C
-        } else {
+        } else if (GOTHIC_BASE_VERSION == 112) {
             WinAPI__LoadLibrary = MEM_ReadInt (8467024); //0x813250
+        } else {
+            WinAPI__LoadLibrary = MEM_ReadInt (8520320); //0x820280
         };
     
         CALL_PtrParam(_@s(lpFileName) + 8 /* offset of ptr */);
@@ -1897,8 +1905,10 @@ func int GetProcAddress (var int hModule, var string lpProcName) {
             WinAPI__GetProcAddress = MEM_ReadInt (8577688); //0x82E298
         } else if (GOTHIC_BASE_VERSION == 1) {
             WinAPI__GetProcAddress = MEM_ReadInt (8192260); //0x7D0104
-        } else {
+        } else if (GOTHIC_BASE_VERSION == 112) {
             WinAPI__GetProcAddress = MEM_ReadInt (8466772); //0x813154
+        } else {
+            WinAPI__GetProcAddress = MEM_ReadInt (8520404); //0x8202D4
         };
         
         CALL_PtrParam(_@s(lpProcName) + 8 /* offset of ptr */);
@@ -2014,6 +2024,7 @@ const int IDCONTINUE = 11;
 func int MEM_MessageBox (var string txt, var string caption, var int type) {
     /* Hier liegt die Funktion */
     const int WinAPI__MessageBox_G2 = 8079592; //0x7B48E8
+    const int WinAPI__MessageBox_G130 = 8029218; //0x7A8422
     const int WinAPI__MessageBox_G112 = 7985898; //0x79DAEA
     const int WinAPI__MessageBox_G1 = 7713298; //0x75B212
     
@@ -2025,7 +2036,10 @@ func int MEM_MessageBox (var string txt, var string caption, var int type) {
     CALL_cStringPtrParam (txt);            
     CALL_IntParam (0);                     
     
-    CALL__stdcall (MEMINT_SwitchG1G112G2(WinAPI__MessageBox_G1, WinAPI__MessageBox_G112, WinAPI__MessageBox_G2));
+    CALL__stdcall (MEMINT_SwitchExe(WinAPI__MessageBox_G1,
+                                    WinAPI__MessageBox_G112,
+                                    WinAPI__MessageBox_G130,
+                                    WinAPI__MessageBox_G2));
     
     return CALL_RetValAsInt();
 };
@@ -2260,18 +2274,20 @@ func void MEM_ArrayRemoveValueOnce (var int zCArray_ptr, var int value) {
 func void MEMINT_QSort(var int base, var int num, var int size, var int comparator) {
     const int qsort_G1 = 7828863; //0x77757F
     const int qsort_G112 = 8106815; //0x7BB33F
+    const int qsort_G130 = 8145583; //0x7C4AAF
     const int qsort_G2 = 8195951; //0x7D0F6F
     
     const int compare_G1 = 5502288; //0x53F550
     const int compare_G112 = 5599008; //0x556F20
+    const int compare_G130 = 5565056; //0x54EA80
     const int compare_G2 = 5586080; //0x553CA0
     
     if (comparator == 0) {
-        comparator = MEMINT_SwitchG1G112G2(compare_G1, compare_G112, compare_G2);
+        comparator = MEMINT_SwitchExe(compare_G1, compare_G112, compare_G130, compare_G2);
     };
     
     var int qsort;
-    qsort   = MEMINT_SwitchG1G112G2(qsort_G1,   qsort_G112,   qsort_G2  );
+    qsort   = MEMINT_SwitchExe(qsort_G1, qsort_G112, qsort_G130, qsort_G2);
     
     const int call = 0;
     if (CALL_Begin(call)) {
@@ -2424,9 +2440,10 @@ func string STR_FromChar(var int char) {
         CALL_PtrParam(_@(char));
         
         /* zString::zString(const char*) */
-        CALL__thiscall(_@(ptr), MEMINT_SwitchG1G112G2(4199328 /* 0x4013A0 */,
-                                                      4198592 /* 0x4010C0 */,
-                                                  4198592 /* 0x4010C0 */));
+        CALL__thiscall(_@(ptr), MEMINT_SwitchExe(4199328 /* 0x4013A0 */,
+                                                 4198592 /* 0x4010C0 */,
+                                                 4198592 /* 0x4010C0 */,
+                                                 4198592 /* 0x4010C0 */));
         call = CALL_End();
     };
     
@@ -2492,6 +2509,7 @@ const int STR_SMALLER = -1;
 func int STR_Compare(var string str1, var string str2) {
     const int strncmp_G1 = 7887344; //0x7859F0
     const int strncmp_G112 = 8164848; //0x7C95F0
+    const int strncmp_G130 = 8203776; //0x7D2E00
     const int strncmp_G2 = 8254144; //0x7DF2C0
     
     var int ptr1; ptr1 = _@s(str1);
@@ -2522,7 +2540,7 @@ func int STR_Compare(var string str1, var string str2) {
         CALL_PtrParam(_@(ptr1));
         
         CALL_PutRetValTo(_@(ret));
-        CALL__cdecl(MEMINT_SwitchG1G112G2(strncmp_G1, strncmp_G112, strncmp_G2));
+        CALL__cdecl(MEMINT_SwitchExe(strncmp_G1, strncmp_G112, strncmp_G130, strncmp_G2));
         
         call = CALL_End();
     };
@@ -2749,6 +2767,7 @@ func int STR_SplitCount(var string str, var string seperator) {
 func string STR_Upper(var string str) {
     const int zSTRING__Upper_G1 = 4608912; //0x465390
     const int zSTRING__Upper_G112 = 4640912; //0x46D090
+    const int zSTRING__Upper_G130 = 4628176; //0x469ED0
     const int zSTRING__Upper_G2 = 4631296; //0x46AB00
     
     var int ptr; ptr = _@s(str);
@@ -2756,7 +2775,10 @@ func string STR_Upper(var string str) {
     const int call = 0;
     if (CALL_Begin(call)) {
         CALL_PutRetValTo(0);
-        CALL__thiscall(_@(ptr), MEMINT_SwitchG1G112G2(zSTRING__Upper_G1, zSTRING__Upper_G112, zSTRING__Upper_G2));
+        CALL__thiscall(_@(ptr), MEMINT_SwitchExe(zSTRING__Upper_G1,
+                                                 zSTRING__Upper_G112,
+                                                 zSTRING__Upper_G130,
+                                                 zSTRING__Upper_G2));
         
         call = CALL_End();
     };
@@ -2767,6 +2789,7 @@ func string STR_Upper(var string str) {
 func string STR_Lower(var string str) {
     const int zSTRING__Lower_G1 = 4608640; //0x465280
     const int zSTRING__Lower_G112 = 4640624; //0x46CF70
+    const int zSTRING__Lower_G130 = 4627904; //0x469DC0
     const int zSTRING__Lower_G2 = 4631024; //0x46A9F0
 
     var int ptr; ptr = _@s(str);
@@ -2774,7 +2797,10 @@ func string STR_Lower(var string str) {
     const int call = 0;
     if (CALL_Begin(call)) {
         CALL_PutRetValTo(0);
-        CALL__thiscall(_@(ptr), MEMINT_SwitchG1G112G2(zSTRING__Lower_G1, zSTRING__Lower_G112, zSTRING__Lower_G2));
+        CALL__thiscall(_@(ptr), MEMINT_SwitchExe(zSTRING__Lower_G1,
+                                                 zSTRING__Lower_G112,
+                                                 zSTRING__Lower_G130,
+                                                 zSTRING__Lower_G2));
 
         call = CALL_End();
     };
@@ -2818,6 +2844,7 @@ func int MEMINT_GetBuf_8K() {
 func int MEM_FindParserSymbol (var string inst) {
     const int zCParser__GetIndex_G1 = 7250112; //0x6EA0C0
     const int zCParser__GetIndex_G112 = 7483680; //0x723120
+    const int zCParser__GetIndex_G130 = 7551536; //0x733A30
     const int zCParser__GetIndex_G2 = 7943280; //0x793470
     
     var int ptr; ptr = _@s(inst);
@@ -2828,7 +2855,10 @@ func int MEM_FindParserSymbol (var string inst) {
         
         CALL_PutRetValTo(_@(ret));
         CALL__thiscall(_@(currParserAddress),
-                       MEMINT_SwitchG1G112G2(zCParser__GetIndex_G1, zCParser__GetIndex_G112, zCParser__GetIndex_G2));
+                       MEMINT_SwitchExe(zCParser__GetIndex_G1,
+                                        zCParser__GetIndex_G112,
+                                        zCParser__GetIndex_G130,
+                                        zCParser__GetIndex_G2));
         
         call = CALL_End();
     };
@@ -3113,7 +3143,10 @@ func int MEMINT_IsFrameBoundary(var int ESP) {
     const int retAdr = 0;
     if (!retAdr) {
         /* Wenn DoStack sich selbst aufruft, steht diese Rücksprungaddresse auf dem Stack: */
-        retAdr = MEMINT_SwitchG1G112G2(7246244 /* 0x6E91A4 */, 7479642 /* 0x72215A */, 7939332 /*0x792504 */);
+        retAdr = MEMINT_SwitchExe(7246244 /* 0x6E91A4 */,
+                                  7479642 /* 0x72215A */,
+                                  7547588 /* 0x732AC4 */,
+                                  7939332 /* 0x792504 */);
     };
 
     return (MEM_ReadInt(ESP)   ==     -1)
@@ -3995,10 +4028,11 @@ func int MEM_InsertVob(var string vis, var string wp) {
     /* oCMob von Gothic konstruieren lassen */
     const int oCNpc__player_G1 = 9288624; //0x8DBBB0
     const int oCNpc__player_G112 = 9580852; //0x923134
+    const int oCNpc__player_G130 = 9974236; //0x9831DC
     const int oCNpc__player_G2 = 11216516; //0xAB2684
     
     var int playerAdr;
-    playerAdr = MEMINT_SwitchG1G112G2(oCNpc__player_G1, oCNpc__player_G112, oCNpc__player_G2);
+    playerAdr = MEMINT_SwitchExe(oCNpc__player_G1, oCNpc__player_G112, oCNpc__player_G130, oCNpc__player_G2);
     
     var int wasInvalid; wasInvalid = 0;
     
@@ -4035,7 +4069,7 @@ func void MEM_DeleteVob(var int vobPtr) {
     if (CALL_Begin(call)) {
         /* oCWorld.RemoveVob */
         CALL_IntParam(_@(vobPtr));
-        CALL__thiscall(_@(world), MEMINT_SwitchG1G112G2(7171824, 7399888, 7864512));
+        CALL__thiscall(_@(world), MEMINT_SwitchExe(7171824, 7399888, 7472768, 7864512));
     
         call = CALL_End();
     };
@@ -4053,6 +4087,7 @@ func int MEM_GetBufferCRC32 (var int buf, var int buflen)
 {
     const int GetBufferCRC32_G1 = 6088464; //0x5CE710
     const int GetBufferCRC32_G112 = 6214832; //0x5ED4B0
+    const int GetBufferCRC32_G130 = 6237216; //0x5F2C20
     const int GetBufferCRC32_G2 = 6265360; //0x5F9A10
     
     var int null;
@@ -4064,7 +4099,10 @@ func int MEM_GetBufferCRC32 (var int buf, var int buflen)
         CALL_PtrParam(_@(buf));
         
         CALL_PutRetValTo(_@(ret));
-        CALL__cdecl(MEMINT_SwitchG1G112G2(GetBufferCRC32_G1, GetBufferCRC32_G112, GetBufferCRC32_G2));
+        CALL__cdecl(MEMINT_SwitchExe(GetBufferCRC32_G1,
+                                     GetBufferCRC32_G112,
+                                     GetBufferCRC32_G130,
+                                     GetBufferCRC32_G2));
         
         call = CALL_End();
     };
@@ -4091,6 +4129,7 @@ func int MEMINT_GetWorldHashBucket (var int hash) {
 func int MEM_SearchVobByName (var string str) {
     const int oCWorld__SearchVobByName_G1 = 7173120; //0x6D7400
     const int oCWorld__SearchVobByName_G112 = 7401296; //0x70EF50
+    const int oCWorld__SearchVobByName_G130 = 7474128; //0x720BD0
     const int oCWorld__SearchVobByName_G2 = 7865872; //0x780610
     
     var int ptr;   ptr   = _@s(str);
@@ -4102,9 +4141,10 @@ func int MEM_SearchVobByName (var string str) {
         
         CALL_PutRetValTo(_@(ret));
         CALL__thiscall(_@(world),
-                       MEMINT_SwitchG1G112G2(oCWorld__SearchVobByName_G1,
-                                             oCWorld__SearchVobByName_G112,
-                                             oCWorld__SearchVobByName_G2));
+                       MEMINT_SwitchExe(oCWorld__SearchVobByName_G1,
+                                        oCWorld__SearchVobByName_G112,
+                                        oCWorld__SearchVobByName_G130,
+                                        oCWorld__SearchVobByName_G2));
         
         call = CALL_End();
     };
@@ -4116,6 +4156,7 @@ func int MEM_SearchVobByName (var string str) {
 func int MEM_SearchAllVobsByName (var string str) {
     const int oCWorld__SearchVobListByName_G1 = 7173296; //0x6D74B0
     const int oCWorld__SearchVobListByName_G112 = 7401472; //0x70F000
+    const int oCWorld__SearchVobListByName_G130 = 7474304; //0x720C80
     const int oCWorld__SearchVobListByName_G2 = 7866048; //0x7806C0
     
     var int arr;   arr   = MEM_ArrayCreate();
@@ -4129,9 +4170,10 @@ func int MEM_SearchAllVobsByName (var string str) {
         
         CALL_PutRetValTo(0);
         CALL__thiscall(_@(world),
-                       MEMINT_SwitchG1G112G2(oCWorld__SearchVobListByName_G1,
-                                             oCWorld__SearchVobListByName_G112,
-                                             oCWorld__SearchVobListByName_G2));
+                       MEMINT_SwitchExe(oCWorld__SearchVobListByName_G1,
+                                        oCWorld__SearchVobListByName_G112,
+                                        oCWorld__SearchVobListByName_G130,
+                                        oCWorld__SearchVobListByName_G2));
         
         call = CALL_End();
     };
@@ -4148,6 +4190,7 @@ func int MEM_SearchAllVobsByName (var string str) {
 func void MEM_RenameVob (var int vobPtr, var string newName) {
     const int zCVob_SetVobName_G1 = 6113648; //0x5D4970
     const int zCVob_SetVobName_G112 = 6241600; //0x5F3D40
+    const int zCVob_SetVobName_G130 = 6262736; //0x5F8FD0
     const int zCVob_SetVobName_G2 = 6290896; //0x5FFDD0
     
     var int ptr;   ptr   = _@s(newName);
@@ -4157,7 +4200,10 @@ func void MEM_RenameVob (var int vobPtr, var string newName) {
         CALL_PtrParam(_@(ptr));
         CALL_PutRetValTo(0);
         CALL__thiscall(_@(vobPtr),
-                       MEMINT_SwitchG1G112G2(zCVob_SetVobName_G1, zCVob_SetVobName_G112, zCVob_SetVobName_G2));
+                       MEMINT_SwitchExe(zCVob_SetVobName_G1,
+                                        zCVob_SetVobName_G112,
+                                        zCVob_SetVobName_G130,
+                                        zCVob_SetVobName_G2));
         
         call = CALL_End();
     };
@@ -4170,6 +4216,7 @@ func void MEM_RenameVob (var int vobPtr, var string newName) {
 func int MEMINT_VobGetEM(var int vobPtr) {
     const int zCVob__GetEM_G1 = 6113712; //5D49B0
     const int zCVob__GetEM_G112 = 6241664; //5F3D80
+    const int zCVob__GetEM_G130 = 6262800; //5F9010
     const int zCVob__GetEM_G2 = 6290960; //5FFE10
     
     const int null = 0;
@@ -4178,7 +4225,7 @@ func int MEMINT_VobGetEM(var int vobPtr) {
         CALL_PutRetValTo(_@(ret));
         CALL__fastcall(_@(vobPtr),
                        _@(null),
-                       MEMINT_SwitchG1G112G2(zCVob__GetEM_G1, zCVob__GetEM_G112, zCVob__GetEM_G2));
+                       MEMINT_SwitchExe(zCVob__GetEM_G1, zCVob__GetEM_G112, zCVob__GetEM_G130, zCVob__GetEM_G2));
         
         call = CALL_End();
     };
@@ -4195,6 +4242,7 @@ func void MEM_TriggerVob (var int vobPtr) {
 
     const int zCEventManager_OnTrigger_G1 = 7202656; //0x6DE760
     const int zCEventManager_OnTrigger_G112 = 7432928; //0x716AE0
+    const int zCEventManager_OnTrigger_G130 = 7503792; //0x727FB0
     const int zCEventManager_OnTrigger_G2 = 7895536; //0x7879F0
     
     var int eventMan; eventMan = MEMINT_VobGetEM(vobPtr);
@@ -4205,9 +4253,10 @@ func void MEM_TriggerVob (var int vobPtr) {
         CALL_PtrParam(_@(vobPtr));
         CALL_PutRetValTo(0);
         CALL__thiscall(_@(eventMan),
-                       MEMINT_SwitchG1G112G2(zCEventManager_OnTrigger_G1,
-                                             zCEventManager_OnTrigger_G112,
-                                             zCEventManager_OnTrigger_G2));
+                       MEMINT_SwitchExe(zCEventManager_OnTrigger_G1,
+                                        zCEventManager_OnTrigger_G112,
+                                        zCEventManager_OnTrigger_G130,
+                                        zCEventManager_OnTrigger_G2));
         
         call = CALL_End();
     };
@@ -4221,6 +4270,7 @@ func void MEM_UntriggerVob (var int vobPtr) {
 
     const int zCEventManager_OnUnTrigger_G1 = 7202848; //6DE820
     const int zCEventManager_OnUnTrigger_G112 = 7433136; //716BB0
+    const int zCEventManager_OnUnTrigger_G130 = 7503984; //728070
     const int zCEventManager_OnUnTrigger_G2 = 7895728; //787AB0
     
     var int eventMan; eventMan = MEMINT_VobGetEM(vobPtr);
@@ -4231,9 +4281,10 @@ func void MEM_UntriggerVob (var int vobPtr) {
         CALL_PtrParam(_@(vobPtr));
         CALL_PutRetValTo(0);
         CALL__thiscall(_@(eventMan),
-                       MEMINT_SwitchG1G112G2(zCEventManager_OnUnTrigger_G1,
-                                             zCEventManager_OnUnTrigger_G112,
-                                             zCEventManager_OnUnTrigger_G2));
+                       MEMINT_SwitchExe(zCEventManager_OnUnTrigger_G1,
+                                        zCEventManager_OnUnTrigger_G112,
+                                        zCEventManager_OnUnTrigger_G130,
+                                        zCEventManager_OnUnTrigger_G2));
         
         call = CALL_End();
     };
@@ -4439,7 +4490,7 @@ func int MEM_GothOptExists (var string sectionname, var string optionname) {
 //--------------------------------------
 
 func string MEM_GetModOpt (var string sectionname, var string optionname) {
-    if (GOTHIC_BASE_VERSION == 112) {
+    if (GOTHIC_BASE_VERSION == 112) || (GOTHIC_BASE_VERSION == 130) {
         return "";
     };
     MEMINT_OPT_Set = _^(MEM_ReadInt (zgameoptions_Pointer_Address));
@@ -4456,7 +4507,7 @@ func string MEM_GetModOpt (var string sectionname, var string optionname) {
 };
 
 func int MEM_ModOptSectionExists (var string sectionname) {
-    if (GOTHIC_BASE_VERSION == 112) {
+    if (GOTHIC_BASE_VERSION == 112) || (GOTHIC_BASE_VERSION == 130) {
         return FALSE;
     };
     MEMINT_OPT_Set = _^(MEM_ReadInt (zgameoptions_Pointer_Address));
@@ -4527,7 +4578,7 @@ func void MEM_ApplyGothOpt() {
     const int call = 0;
     if (CALL_Begin(call)) {
         /* CGameManager.ApplySomeSettings */
-        CALL__thiscall(MEMINT_gameMan_Pointer_address, MEMINT_SwitchG1G112G2(4351936, 4362720, 4355760));
+        CALL__thiscall(MEMINT_gameMan_Pointer_address, MEMINT_SwitchExe(4351936, 4362720, 4354928, 4355760));
         call = CALL_End();
     };
 };
@@ -4625,8 +4676,8 @@ func void MEM_SetKeys(var string name, var int primary, var int secondary) {
     /* Rebind the keys */
     const int call = 0;
     if (CALL_Begin(call)) {
-        var int zInputPtr;         zInputPtr         = MEMINT_SwitchG1G112G2(8834208, 9119640, 9246288);
-        var int zCInput__BindKeys; zCInput__BindKeys = MEMINT_SwitchG1G112G2(5003568, 5067808, 5045760);
+        var int zInputPtr;         zInputPtr         = MEMINT_SwitchExe(8834208, 9119640, 9187320, 9246288);
+        var int zCInput__BindKeys; zCInput__BindKeys = MEMINT_SwitchExe(5003568, 5067808, 5036176, 5045760);
         
         var int null;
         CALL_IntParam(_@(null));
@@ -4656,12 +4707,13 @@ func void MEM_SetSecondaryKey(var string name, var int key) {
 func int MEM_GetSystemTime() {
     const int sysGetTimePtr_G1 = 5204320; //0x4F6960;
     const int sysGetTimePtr_G112 = 5280720; //0x5093D0;
+    const int sysGetTimePtr_G130 = 5252496; //0x502590;
     const int sysGetTimePtr_G2 = 5264000; //0x505280;
     
     const int call = 0;
     if (CALL_Begin(call)) {        
         CALL_PutRetValTo(_@(ret));
-        CALL__cdecl(MEMINT_SwitchG1G112G2(sysGetTimePtr_G1, sysGetTimePtr_G112, sysGetTimePtr_G2));
+        CALL__cdecl(MEMINT_SwitchExe(sysGetTimePtr_G1, sysGetTimePtr_G112, sysGetTimePtr_G130, sysGetTimePtr_G2));
         call = CALL_End();
     };
     
@@ -4675,6 +4727,7 @@ func int MEM_GetPerformanceCounter() {
     
     const int QueryPerformanceCounter_G1 = 7712432; //0x75AEB0
     const int QueryPerformanceCounter_G112 = 7985098; //0x79D7CA
+    const int QueryPerformanceCounter_G130 = 8029008; //0x7A8350
     const int QueryPerformanceCounter_G2 = 8079382; //0x7B4816
     
     const int call = 0;
@@ -4682,9 +4735,10 @@ func int MEM_GetPerformanceCounter() {
         CALL_IntParam(_@(space));
         
         CALL_PutRetValTo(0);
-        CALL__stdcall(MEMINT_SwitchG1G112G2(QueryPerformanceCounter_G1,
-                                            QueryPerformanceCounter_G112,
-                                            QueryPerformanceCounter_G2));
+        CALL__stdcall(MEMINT_SwitchExe(QueryPerformanceCounter_G1,
+                                       QueryPerformanceCounter_G112,
+                                       QueryPerformanceCounter_G130,
+                                       QueryPerformanceCounter_G2));
         call = CALL_End();
     };
     
@@ -4785,8 +4839,9 @@ func void MEMINT_SendToSpy_Implementation(var int errorType, var string text) {
     
     const int zerr_G1 = 8821208; //0x8699D8
     const int zerr_G112 = 9103128; //0x8AE718
+    const int zerr_G130 = 9172664; //0x8BF6B8
     const int zerr_G2 = 9231568; //0x8CDCD0
-    var int zerrPtr; zerrPtr = MEMINT_SwitchG1G112G2(zerr_G1, zerr_G112, zerr_G2);
+    var int zerrPtr; zerrPtr = MEMINT_SwitchExe(zerr_G1, zerr_G112, zerr_G130, zerr_G2);
     
     var zERROR zerr; zerr = _^(zerrPtr);
     var int old_ack_type; old_ack_type = zerr.ack_type;
@@ -4799,7 +4854,7 @@ func void MEMINT_SendToSpy_Implementation(var int errorType, var string text) {
             const int WndProc_FocusWarn_G1 = 5199312; //0x4F55D0
             const int WndProc_FocusWarn_G112 = 5275646; //0x507FFE
             var int WndProc_FocusWarn;
-            WndProc_FocusWarn = MEMINT_SwitchG1G112G2(WndProc_FocusWarn_G1, WndProc_FocusWarn_G112, 0);
+            WndProc_FocusWarn = MEMINT_SwitchExe(WndProc_FocusWarn_G1, WndProc_FocusWarn_G112, 0, 0);
             MemoryProtectionOverride(WndProc_FocusWarn, 5);
             MEM_WriteByte(WndProc_FocusWarn+0, /*83*/ 131); // esp
             MEM_WriteByte(WndProc_FocusWarn+1, /*C4*/ 196); // add
@@ -4823,6 +4878,7 @@ func void MEMINT_SendToSpy_Implementation(var int errorType, var string text) {
     
     const int zERROR_Report_G1 = 4489808; //0x448250
     const int zERROR_Report_G112 = 4514480; //0x44E2B0
+    const int zERROR_Report_G130 = 4505984; //0x44C180
     const int zERROR_Report_G2 = 4507856; //0x44C8D0
     
     var int null;
@@ -4842,7 +4898,7 @@ func void MEMINT_SendToSpy_Implementation(var int errorType, var string text) {
         
         CALL_PutRetValTo(0);
         CALL__thiscall(_@(zerrPtr),
-                       MEMINT_SwitchG1G112G2(zERROR_Report_G1, zERROR_Report_G112, zERROR_Report_G2));
+                       MEMINT_SwitchExe(zERROR_Report_G1, zERROR_Report_G112, zERROR_Report_G130, zERROR_Report_G2));
         
         call = CALL_End();
     };
@@ -5049,20 +5105,26 @@ func void MEMINT_SetupExceptionHandler() {
         
         const int zCParser__DoStack_G1 = 7243264; //0x6E8600
         const int zCParser__DoStack_G112 = 7476656; //0x7215B0
+        const int zCParser__DoStack_G130 = 7544608; //0x731F20
         const int zCParser__DoStack_G2 = 7936352; //0x791960
         
         CALL_PutRetValTo(0);
         CALL__thiscall(_@(contentParserAddress),
-                      MEMINT_SwitchG1G112G2(zCParser__DoStack_G1, zCParser__DoStack_G112, zCParser__DoStack_G2));
+                      MEMINT_SwitchExe(zCParser__DoStack_G1,
+                                       zCParser__DoStack_G112,
+                                       zCParser__DoStack_G130,
+                                       zCParser__DoStack_G2));
         
         /* now jump to the original handler (whatever that one is doing) */
         const int zCParser__DoStack_SEH_G1 = 8146176; //0x7C4D00
         const int zCParser__DoStack_SEH_G112 = 8420944; //0x807E50
+        const int zCParser__DoStack_SEH_G130 = 8477600; //0x815BA0
         const int zCParser__DoStack_SEH_G2 = 8562816; //0x82A880
         
-        var int SEH; SEH = MEMINT_SwitchG1G112G2(zCParser__DoStack_SEH_G1,
-                                                 zCParser__DoStack_SEH_G112,
-                                                 zCParser__DoStack_SEH_G2);
+        var int SEH; SEH = MEMINT_SwitchExe(zCParser__DoStack_SEH_G1,
+                                            zCParser__DoStack_SEH_G112,
+                                            zCParser__DoStack_SEH_G130,
+                                            zCParser__DoStack_SEH_G2);
         
         ASM_1(ASMINT_OP_jmp);
         ASM_4(SEH - (ASM_Here() + 4));
@@ -5072,12 +5134,14 @@ func void MEMINT_SetupExceptionHandler() {
         /* install the exception handler: */
         const int zCParser__DoStack_SEH_Pusher_G1 = 7243266 + 1; //0x6E8602 + 1
         const int zCParser__DoStack_SEH_Pusher_G112 = 7476658 + 1; //0x7215B2 + 1
+        const int zCParser__DoStack_SEH_Pusher_G130 = 7544610 + 1; //0x731F22 + 1
         const int zCParser__DoStack_SEH_Pusher_G2 = 7936354 + 1; //0x791962 + 1
         
         var int SEHPusher;
-        SEHPusher = MEMINT_SwitchG1G112G2(zCParser__DoStack_SEH_Pusher_G1,
-                                          zCParser__DoStack_SEH_Pusher_G112,
-                                      zCParser__DoStack_SEH_Pusher_G2);
+        SEHPusher = MEMINT_SwitchExe(zCParser__DoStack_SEH_Pusher_G1,
+                                     zCParser__DoStack_SEH_Pusher_G112,
+                                     zCParser__DoStack_SEH_Pusher_G130,
+                                     zCParser__DoStack_SEH_Pusher_G2);
         
         MemoryProtectionOverride(SEHPusher, 4);
                                                    
@@ -5243,7 +5307,10 @@ func int MEM_Alloc_(var int ele) {
     
     if (CALL_Begin(call)) {
         var int cAlloc_ptr;
-        cAlloc_ptr = MEMINT_SwitchG1G112G2(7712240 /*0x75ADF0*/, 7984912 /*0x79D710*/, 8078576 /*0x7B44F0*/);
+        cAlloc_ptr = MEMINT_SwitchExe(7712240 /*0x75ADF0*/,
+                                      7984912 /*0x79D710*/,
+                                      8028112 /*0x7A7FD0*/,
+                                      8078576 /*0x7B44F0*/);
     
         CALL_IntParam(_@(size));
         CALL_IntParam(_@(ele));
@@ -5267,7 +5334,10 @@ func void MEM_Free_(var int ptr) {
     
     if (CALL_Begin(call)) {
         var int free_ptr;
-        free_ptr = MEMINT_SwitchG1G112G2(7712111 /*0x75AD6F*/, 7984783 /*0x79D68F*/, 8078540 /*0x7B44CC*/);
+        free_ptr = MEMINT_SwitchExe(7712111 /*0x75AD6F*/,
+                                    7984783 /*0x79D68F*/,
+                                    8028076 /*0x7A7FAC*/,
+                                    8078540 /*0x7B44CC*/);
     
         CALL_IntParam(_@(ptr));
         
@@ -5345,7 +5415,7 @@ func int MEMINT_ReportVersionCheck() {
      * from some location within the data section.
      * This makes this check reliable */
     
-    var int val; val = MEMINT_SwitchG1G112G2(-521402937, -2127113055, 504628679);
+    var int val; val = MEMINT_SwitchExe(-521402937, -2127113055, 945554887, 504628679);
     var int ptr; ptr = 4198400; //0x401000
     
     if (MEM_ReadInt(ptr) != val) {
