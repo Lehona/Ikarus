@@ -1,4 +1,5 @@
 const int GOTHIC_BASE_VERSION = 130; // Gothic 2 Classic 1.30 (fix) Reportversion
+const int IDX_EXE = 2;
 
 //--------------------------------------
 // Nutzervariablen:

@@ -1,4 +1,5 @@
 const int GOTHIC_BASE_VERSION = 112; // Gothic Sequel 1.12f
+const int IDX_EXE = 1;
 
 //--------------------------------------
 // Nutzervariablen:

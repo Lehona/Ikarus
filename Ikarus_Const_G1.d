@@ -1,4 +1,5 @@
 const int GOTHIC_BASE_VERSION = 1;
+const int IDX_EXE = 0;
 
 //--------------------------------------
 // Nutzervariablen:
