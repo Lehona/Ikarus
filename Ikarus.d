@@ -1463,15 +1463,15 @@ func void CALL_cStringPtrParam (var string param) {
 
 /* struct (not a Pointer to a struct, but a struct as is) */
 func void CALL_StructParam (var int ptr, var int words) {
-    if (CALLINT_CodeMode == CALLINT_CodeMode_Recyclable) {
-        CALL_IntParam (ptr + 4 * (words -1)); /* this is where i expect the last word */
-        CALL_StructParam (ptr, words - 1);
-        return;
-    };
-
     /* the struct as a whole has to be pushed onto the stack
      * it has to be pushed in reverse order to lie correctly */
     if (words > 0) {
+        if (CALLINT_CodeMode == CALLINT_CodeMode_Recyclable) {
+            CALL_IntParam (ptr + 4 * (words -1)); /* this is where i expect the last word */
+            CALL_StructParam (ptr, words - 1);
+            return;
+        };
+
         CALL_IntParam (MEM_ReadIntArray (ptr, words - 1));
         CALL_StructParam (ptr, words - 1);
     };
