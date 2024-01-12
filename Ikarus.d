@@ -2436,7 +2436,7 @@ func string STR_SubStr (var string str, var int start, var int count) {
             /* Careful! MEM_Warn will use STR_SubStr (but will never use it in a way that would produce a warning) */
             var string saveStr; var int saveStart; var int saveCount;
             saveStr = str; saveStart = start; saveCount = count;
-            MEM_Warn ("STR_SubStr: The end of the desired substring exceeds the end of the string.");
+            MEM_SendToSpy(zERR_TYPE_WARN, "STR_SubStr: The end of the desired substring exceeds the end of the string.");
             str = saveStr; start = saveStart; count = saveCount;
             count = zStrSrc.len - start;
         };
