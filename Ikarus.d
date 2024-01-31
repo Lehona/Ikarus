@@ -1,3 +1,4 @@
+//! suppress: W1
 //######################################################
 //
 //  Kern des Skriptpakets "Ikarus"
@@ -1737,11 +1738,11 @@ func void MEM_Clear(var int ptr, var int size) {
     const int memset_G1 = 7877040; //0x7831B0
     const int memset_G2 = 8243856; //0x7DCA90
     
-    var int null;
+    var int _null;
     const int call = 0;
     if (CALL_Begin(call)) {
         CALL_IntParam(_@(size));
-        CALL_IntParam(_@(null));
+        CALL_IntParam(_@(_null));
         CALL_PtrParam(_@(ptr));
         
         CALL_PutRetValTo(0);
@@ -3456,7 +3457,7 @@ func void MEMINT_PrepareLoopsAndJumps(var int stackPos) {
     MEM_ArrayFree(usedLabels  );
     
     /* Handle while */
-    var int whileOffset;  whileOffset  = MEM_GetFuncOffset(while);
+    var int whileOffset;  whileOffset  = MEM_GetFuncOffset(_while);
     var int repeatOffset; repeatOffset = MEM_GetFuncOffset(repeat);
     var int endID;        endID        = MEM_FindParserSymbol("END");
     var int breakID;      breakID      = MEM_FindParserSymbol("BREAK");
@@ -3579,14 +3580,14 @@ func void MEMINT_PrepareLoopsAndJumps(var int stackPos) {
 
 class C_Label {}; /* so it is possible to declare var C_Label lbl */
 
-const int break = -42;
-const int continue = -23;
+const int _break = -42;
+const int _continue = -23;
 const int end = -72;
-func void while(var int b) {
+func void _while(var int b) {
     /* consistency check */
     var int calledFrom; calledFrom = MEM_GetCallerStackPos() - 5;
     if (MEM_ReadByte(calledFrom +     currParserStackAddress) != zPAR_TOK_CALL)
-    || (MEM_ReadInt (calledFrom + 1 + currParserStackAddress) != MEM_GetFuncOffset(while)) {
+    || (MEM_ReadInt (calledFrom + 1 + currParserStackAddress) != MEM_GetFuncOffset(_while)) {
         MEM_Error("while: While was called in an unorthodox way! This cannot be handled.");
         return;
     };
@@ -4025,11 +4026,11 @@ func int MEM_GetBufferCRC32 (var int buf, var int buflen)
     const int GetBufferCRC32_G1 = 6088464; //0x5CE710
     const int GetBufferCRC32_G2 = 6265360; //0x5F9A10
     
-    var int null;
+    var int _null;
     
     const int call = 0;
     if (CALL_Begin(call)) {
-        CALL_IntParam(_@(null));
+        CALL_IntParam(_@(_null));
         CALL_IntParam(_@(buflen));
         CALL_PtrParam(_@(buf));
         
@@ -4134,12 +4135,12 @@ func int MEMINT_VobGetEM(var int vobPtr) {
     const int zCVob__GetEM_G1 = 6113712; //5D49B0
     const int zCVob__GetEM_G2 = 6290960; //5FFE10
     
-    const int null = 0;
+    const int _null = 0;
     const int call = 0;
     if (CALL_Begin(call)) {
         CALL_PutRetValTo(_@(ret));
         CALL__fastcall(_@(vobPtr),
-                       _@(null),
+                       _@(_null),
                        MEMINT_SwitchG1G2(zCVob__GetEM_G1, zCVob__GetEM_G2));
         
         call = CALL_End();
@@ -4578,8 +4579,8 @@ func void MEM_SetKeys(var string name, var int primary, var int secondary) {
         var int zInputPtr;         zInputPtr         = MEMINT_SwitchG1G2(8834208, 9246288);
         var int zCInput__BindKeys; zCInput__BindKeys = MEMINT_SwitchG1G2(5003568, 5045760);
         
-        var int null;
-        CALL_IntParam(_@(null));
+        var int _null;
+        CALL_IntParam(_@(_null));
         CALL__thiscall(zInputPtr, zCInput__BindKeys);
         call = CALL_End();
     };
@@ -4766,19 +4767,19 @@ func void MEMINT_SendToSpy_Implementation(var int errorType, var string text) {
     const int zERROR_Report_G1 = 4489808; //0x448250
     const int zERROR_Report_G2 = 4507856; //0x44C8D0
     
-    var int null;
+    var int _null;
     
     var int ptr; ptr = _@s(text);
     
     const int call  = 0;
     if (CALL_Begin(call)) {
-        CALL_PtrParam(_@(null));  //char * function
-        CALL_PtrParam(_@(null));  //char * file
-        CALL_IntParam(_@(null));  //int line
-        CALL_IntParam(_@(null));  //uint flags
-        CALL_IntParam(_@(null));  //uint level (useless?)
+        CALL_PtrParam(_@(_null));  //char * function
+        CALL_PtrParam(_@(_null));  //char * file
+        CALL_IntParam(_@(_null));  //int line
+        CALL_IntParam(_@(_null));  //uint flags
+        CALL_IntParam(_@(_null));  //uint level (useless?)
         CALL_PtrParam(_@(ptr));   //zString * message
-        CALL_PtrParam(_@(null));  //int errorID (useless)
+        CALL_PtrParam(_@(_null));  //int errorID (useless)
         CALL_PtrParam(_@(errorType)); //zERROR_TYPE errorType
         
         CALL_PutRetValTo(0);
